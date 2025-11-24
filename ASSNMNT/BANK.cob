@@ -142,7 +142,6 @@
            WRITE PRINT-LINE FROM HEADING-2.
            WRITE PRINT-LINE FROM HEADING-3.
            
-      * 2 blank spaces (lines) as requested
            MOVE SPACES TO PRINT-LINE.
            WRITE PRINT-LINE.
            WRITE PRINT-LINE.
