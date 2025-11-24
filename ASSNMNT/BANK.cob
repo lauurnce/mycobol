@@ -46,9 +46,9 @@
            05 FILLER            PIC X(32) VALUE SPACES.
 
        01  HEADING-2.
-           05 FILLER            PIC X(33) VALUE SPACES.
+           05 FILLER            PIC X(25) VALUE SPACES.
            05 FILLER            PIC X(13) VALUE "Makati Avenue".
-           05 FILLER            PIC X(34) VALUE SPACES.
+           05 FILLER            PIC X(42) VALUE SPACES.
 
        01  HEADING-3.
            05 FILLER            PIC X(34) VALUE SPACES.
