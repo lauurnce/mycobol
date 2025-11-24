@@ -106,7 +106,7 @@
            05 FILLER            PIC X(5)  VALUE SPACES.
            05 FILLER            PIC X(27) VALUE
               "Total Accumulated Balance: ".
-           05 FILLER            PIC X(2)  VALUE "P ".
+           05 FILLER            PIC X(1)  VALUE "P".
            05 FT-TOTAL-BAL      PIC Z,ZZZ,ZZZ,ZZ9.99.
            05 FILLER            PIC X(25) VALUE SPACES.
 
