@@ -115,8 +115,7 @@
                 OUTPUT REPORT-FILE.
 
            PERFORM 100-PRINT-HEADINGS.
-           
-      * Prime read: Read the first record to start the logic
+
            READ TRANS-FILE
                AT END SET END-OF-FILE TO TRUE
            END-READ.
