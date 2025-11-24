@@ -81,9 +81,9 @@
            05 DL-ACCT-NO        PIC X(10).
            05 FILLER            PIC X(10) VALUE SPACES.
            05 DL-ACCT-NAME      PIC X(25).
-           05 FILLER            PIC X(5)  VALUE SPACES.
+           05 FILLER            PIC X(2)  VALUE SPACES.
            05 DL-BALANCE        PIC Z,ZZZ,ZZ9.99.
-           05 FILLER            PIC X(11) VALUE SPACES.
+           05 FILLER            PIC X(14) VALUE SPACES.
 
        01  FOOTER-COUNT.
            05 FILLER            PIC X(4)  VALUE SPACES.
