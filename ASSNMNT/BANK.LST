@@ -1,11 +1,11 @@
-     1	      IDENTIFICATION DIVISION.							25NOV25 02:25:22  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							25NOV25 02:29:36  PAGE	  1
      2	      PROGRAM-ID. BANK-REPORT.
      3	     *AUTHOR.	  LAWRENCE PANES.
      4
      5	      ENVIRONMENT DIVISION.
      6	      INPUT-OUTPUT SECTION.
      7	      FILE-CONTROL.
-     8            SELECT TRANS-FILE ASSIGN TO "transactions.txt"
+     8            SELECT TRANS-FILE ASSIGN TO "TRANS.txt"
      9		      ORGANIZATION IS SEQUENTIAL.
     10
     11            SELECT REPORT-FILE ASSIGN TO "report.out"
@@ -57,7 +57,7 @@
     57
     58	      01  HEADING-4.
     59		  05 FILLER	       PIC X(32) VALUE SPACES.
-    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:25:22  PAGE	  2
+    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:29:36  PAGE	  2
     62
     63	      01  HEADING-5.
     64		  05 FILLER	       PIC X(5)  VALUE SPACES.
@@ -116,7 +116,7 @@
    117
    118		  PERFORM 100-PRINT-HEADINGS.
    119
-   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:25:22  PAGE	  3
+   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:29:36  PAGE	  3
    122		  END-READ.
    123
    124		  IF NOT END-OF-FILE
@@ -175,7 +175,7 @@
    177
    178		  READ TRANS-FILE
    179		      AT END SET END-OF-FILE TO TRUE
-   180		  END-READ.   181											25NOV25 02:25:22  PAGE	  4
+   180		  END-READ.   181											25NOV25 02:29:36  PAGE	  4
    182	      300-PRINT-DETAIL.
    183		  MOVE PREV-ACCT-NO TO DL-ACCT-NO.
    184		  MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
@@ -195,7 +195,7 @@
    198		  WRITE PRINT-LINE FROM FOOTER-COUNT.
    199
    200		  MOVE WS-TOTAL-BALANCE TO FT-TOTAL-BAL.
-   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:25:22  PAGE	  5
+   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:29:36  PAGE	  5
 
 
 
@@ -203,7 +203,7 @@
 			Segment    Number     Length	    Name
 
 			  C00	     05        0481	 BANK$REPORT$C00
-			  D00	     06        05BB	 BANK$REPORT$D00
+			  D00	     06        05B5	 BANK$REPORT$D00
 
 
 			Realia COBOL Compiler Version Information
@@ -243,10 +243,10 @@
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     201
-			Compilation time (mm:ss.hh):  0:03.46
-			Compilation speed (lines/minute):  3485
+			Compilation time (mm:ss.hh):  0:02.36
+			Compilation speed (lines/minute):  5110
 
 			Compilation date (yy/mm/dd): 25/11/25
-			     Time of day (hh:mm:ss): 02:25:23
+			     Time of day (hh:mm:ss): 02:29:37
 
-			Source length in LST file:000007399
+			Source length in LST file:000007392
