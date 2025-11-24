@@ -26,7 +26,6 @@
        01  PRINT-LINE           PIC X(80).
 
        WORKING-STORAGE SECTION.
-      * Flags and Counters
        01  WS-FLAGS.
            05 WS-EOF            PIC X VALUE 'N'.
               88 END-OF-FILE    VALUE 'Y'.
