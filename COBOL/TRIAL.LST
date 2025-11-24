@@ -1,0 +1,210 @@
+     1	      IDENTIFICATION DIVISION.							15NOV25 09:05:53  PAGE	  1
+     2	      PROGRAM-ID.      SALE.
+     3	     *AUTHOR.	      ALET.
+     4	     *INSTALLATION.   S-305.
+     5	     *DATE-WRITTEN.   NOVEMBER 19,2008.
+     6	     *DATE-COMPILED.  NOVEMBER 19,2008.
+     7	     *SECURITY.       EXCLUSIVE FOR US.
+     8	     *REMARKS	      FIRST PROGRAM.
+     9	      ENVIRONMENT DIVISION.
+    10	      CONFIGURATION SECTION.
+    11	      SOURCE-COMPUTER.	 IBM-PC.
+    12	      OBJECT-COMPUTER.	 IBM-PC.
+    13	      INPUT-OUTPUT SECTION.
+    14	      FILE-CONTROL.
+    15            SELECT INFILE ASSIGN TO 'SALES.txt'.
+    16            SELECT OUTFILE ASSIGN TO 'BENTA'.
+    17
+    18	      DATA DIVISION.
+    19	      FILE SECTION.
+    20	      FD INFILE
+    21		  LABEL RECORD IS STANDARD
+    22		  RECORD CONTAINS 38 CHARACTERS
+    23		  DATA RECORD IS INREC.
+    24	      01  INREC.
+    25		  02  AC	  PIC  X.
+    26		  02  SNO	  PIC  9(5).
+    27		  02  SNA.
+    28		      05 FN	  PIC X(10).
+    29		      05 MN	  PIC X(5).
+    30		      05 LN	  PIC X(10).
+    31		  02  AMT	  PIC  9(5)V99.
+    32
+    33	      FD  OUTFILE
+    34		  LABEL RECORD IS OMITTED
+    35		  DATA RECORD IS OUTREC.
+    36	      01  OUTREC.
+    37		  02  FILLER	  PIC X(80).
+    38
+    39	      WORKING-STORAGE SECTION.
+    40	      01  SVAC		  PIC	X	VALUE SPACES.
+    41	      01  TNS		  PIC	9(4)	VALUE ZERO.
+    42	      01  TA		  PIC	9(7)V99 VALUE ZERO.
+    43	      01  EOFSW 	  PIC	9	VALUE ZERO.
+    44
+    45	      01  HEAD-1.
+    46		  02  FILLER  PIC X(29)     VALUE SPACES.
+    47            02  FILLER  PIC X(22)     VALUE 'SAN MIGUEL CORPORATION'.
+    48		  02  FILLER  PIC X(29)     VALUE SPACES.
+    49	      01  HEAD-2.
+    50		  02  FILLER  PIC X(31)     VALUE SPACES.
+    51            02  FILLER  PIC X(17)     VALUE 'STA. MESA, MANILA'.
+    52		  02  FILLER  PIC X(32)     VALUE SPACES.
+    53	      01  SUB-1.
+    54		  02 FILLER   PIC X(34)     VALUE SPACES.
+    55            02 FILLER   PIC X(12)     VALUE 'SALES REPORT'.
+    56		  02 FILLER   PIC X(34)     VALUE SPACES.
+    57	      01  SUB-2.
+    58		  02 FILLER   PIC X(7)	    VALUE SPACES.
+    59            02 FILLER   PIC X(4)      VALUE 'AREA'.
+    60		  02 FILLER   PIC X(7)	    VALUE SPACES.    61            02 FILLER   PIC X(8)      VALUE 'SALESMAN'.                           15NOV25 09:05:53  PAGE    2
+    62		  02 FILLER   PIC X(16)     VALUE SPACES.
+    63            02 FILLER   PIC X(8)      VALUE 'SALESMAN'.
+    64		  02 FILLER   PIC X(15)     VALUE SPACES.
+    65            02 FILLER   PIC X(6)      VALUE 'AMOUNT'.
+    66		  02 FILLER   PIC X(9)	    VALUE SPACES.
+    67	      01  SUB-3.
+    68		  02 FILLER   PIC X(7)	    VALUE SPACES.
+    69            02 FILLER   PIC X(4)      VALUE 'CODE'.
+    70		  02 FILLER   PIC X(8)	    VALUE SPACES.
+    71            02 FILLER   PIC X(6)      VALUE 'NUMBER'.
+    72		  02 FILLER   PIC X(18)     VALUE SPACES.
+    73            02 FILLER   PIC X(4)      VALUE 'NAME'.
+    74		  02 FILLER   PIC X(33)     VALUE SPACES.
+    75	      01  DETALYE.
+    76		  02  FILLER	  PIC X(9)    VALUE SPACES.
+    77		  02  P-AC	  PIC X.
+    78		  02  FILLER	  PIC X(10)   VALUE SPACES.
+    79		  02  P-SNO	  PIC 9(5).
+    80		  02  FILLER	  PIC X(8)    VALUE SPACES.
+    81		  02  P-SNA	  PIC X(25).
+    82		  02  FILLER	  PIC X(7)    VALUE SPACES.
+    83		  02  P-AMT	  PIC 99,999.99.
+    84		  02  FILLER	  PIC X(6)    VALUE SPACES.
+    85	      01  TOTAL-1.
+    86		  02 FILLER   PIC X(7)	    VALUE SPACES.
+    87            02 FILLER   PIC X(9)      VALUE 'TOTAL NO.'.
+    88            02 FILLER   PIC X(12)     VALUE 'OF SALESMEN:'.
+    89		  02 FILLER   PIC X(9)	    VALUE SPACES.
+    90		  02 P-TNS    PIC 9,999.
+    91		  02 FILLER   PIC X(38)     VALUE SPACES.
+    92	      01  TOTAL-2.
+    93		  02 FILLER   PIC X(7)	    VALUE SPACES.
+    94            02 FILLER   PIC X(6)      VALUE 'TOTAL '.
+    95            02 FILLER   PIC X(11)     VALUE 'ACCUMULATED'.
+    96            02 FILLER   PIC X(8)      VALUE ' AMOUNT:'.
+    97            02 FILLER   PIC X(4)      VALUE ' PHP'.
+    98		  02 P-TA     PIC 9,999,999.99.
+    99		  02 FILLER   PIC X(33)     VALUE SPACES.
+   100
+   101	      PROCEDURE DIVISION.
+   102	      MAIN-RTN.
+   103		  PERFORM INIT-RTN.
+   104		  PERFORM PROCESS-RTN UNTIL EOFSW = 1.
+   105		  PERFORM FINISH-RTN.
+   106		  STOP RUN.
+   107
+   108	      INIT-RTN.
+   109		  OPEN INPUT INFILE,  OUTPUT OUTFILE.
+   110		  READ INFILE
+   111		      AT END PERFORM END-RTN.
+   112		  IF EOFSW = 0
+   113		      MOVE AC TO SVAC
+   114		      PERFORM HEADING-RTN.
+   115
+   116	      END-RTN.
+   117		  MOVE 1 TO EOFSW.
+   118		  IF TNS = 0
+   119                DISPLAY 'EMPTY FILE'.
+   120   121	      HEADING-RTN.								15NOV25 09:05:53  PAGE	  3
+   122		  WRITE OUTREC FROM HEAD-1 AFTER PAGE.
+   123		  WRITE OUTREC FROM HEAD-2 AFTER 1.
+   124		  WRITE OUTREC FROM SUB-1 AFTER 3.
+   125		  WRITE OUTREC FROM SUB-2 AFTER 2.
+   126		  WRITE OUTREC FROM SUB-3 AFTER 1.
+   127
+   128	      PROCESS-RTN.
+   129            DISPLAY ' '.
+   130		  IF SVAC NOT = AC
+   131		      PERFORM AC-BREAK-RTN.
+   132
+   133
+   134		  MOVE AC TO P-AC.
+   135		  MOVE SNO TO P-SNO.
+   136		  MOVE SNA TO P-SNA.
+   137		  MOVE AMT TO P-AMT.
+   138		  WRITE OUTREC FROM DETALYE AFTER 1.
+   139		  ADD 1 TO TNS.
+   140		  ADD AMT TO TA.
+   141		  READ INFILE
+   142		      AT END PERFORM END-OF-FILE-PROCESSING.
+   143
+   144	      END-OF-FILE-PROCESSING.
+   145		  MOVE 1 TO EOFSW.
+   146		  PERFORM AC-BREAK-RTN.
+   147
+   148	      AC-BREAK-RTN.
+   149		  MOVE TNS TO P-TNS.
+   150		  WRITE OUTREC FROM TOTAL-1 AFTER 3.
+   151		  MOVE TA TO P-TA.
+   152		  WRITE OUTREC FROM TOTAL-2 AFTER 1.
+   153		  MOVE 0 TO TNS, TA.
+   154		  MOVE AC TO SVAC.
+   155
+   156	      FINISH-RTN.
+   157		  CLOSE INFILE, OUTFILE.
+   158            DISPLAY 'TAPOS NA'.Realia COBOL Version 4.000   SN: 01-07732  C:TRIAL1.COB 				15NOV25 09:05:53  PAGE	  4
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        0347	 SALE$C00
+			  D00	     06        04FC	 SALE$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     158
+			Compilation time (mm:ss.hh):  0:18.40
+			Compilation speed (lines/minute):   515
+
+			Compilation date (yy/mm/dd): 25/11/15
+			     Time of day (hh:mm:ss): 09:05:54
+
+			Source length in LST file:000006037

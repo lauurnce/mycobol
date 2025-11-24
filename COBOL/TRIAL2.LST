@@ -1,0 +1,475 @@
+     1	      IDENTIFICATION DIVISION.							15NOV25 07:44:19  PAGE	  1
+     2	      PROGRAM-ID.	 SALE.
+     3	     *AUTHOR.		ALET.
+     4	     *INSTALLATION.	S-305.
+     5	     *DATE-WRITTEN.	NOVEMBER 19,2008.
+     6	     *DATE-COMPILED.	NOVEMBER 19,2008.
+     7	     *SECURITY. 	EXCLUSIVE FOR US.
+     8	     *REMARKS		FIRST PROGRAM.
+     9	      ENVIRONMENT DIVISION.
+    10	      CONFIGURATION SECTION.
+    11	      SOURCE-COMPUTER.	  IBM-PC.
+    12	      OBJECT-COMPUTER.	  IBM-PC.
+    13	      INPUT-OUTPUT SECTION.
+    14	      FILE-CONTROL.
+    15		  SELECT INFILE ASSIGN TO ‘SALES.txt’.
+    16		  SELECT OUTFILE ASSIGN TO ‘BENTA’.
+    17	      DATA DIVISION.
+    18	      FILE SECTION.
+    19	      FD INFILE
+    20		  LABEL RECORD IS STANDARD
+    21		  RECORD CONTAINS 38 CHARACTERS
+    22		  DATA RECORD IS INREC.
+    23	      01  INREC.
+    24		  02	    AC	  PIC  X.
+    25		  02	    SNO   PIC  9(5).
+    26		  02	    SNA.
+    27		       05 FN PIC X(10).
+    28		       05 MN PIC X(5).
+    29		       05 LN PIC X(10).
+    30
+    31
+    32		  02	    AMT  PIC  9(5)V99.
+    33	      FD  OUTFILE
+    34		  LABEL RECORD IS OMITTED
+    35		  DATA RECORD IS OUTREC.
+    36	      01 OUTREC.
+    37		  02   FILLER PIC X(80).
+    38	      WORKING-STORAGE SECTION.
+    39	      01  SVAC		 PIC   X    VALUE SPACES.
+    40	      01  TNS		 PIC   9(4)  VALUE ZERO.
+    41	      01  TA		 PIC   9(7)V99	 VALUE ZERO.
+    42	      01  EOFSW 	 PIC   9  VALUE ZERO.
+    43	      01  HEAD-1.
+    44		  02  FILLER  PIC X (29)    VALUE  SPACES.
+    45		  02  FILLER  PIC X(22)     VALUE ‘SAN MIGUEL
+    46		  CORPORATION’.
+    47		  02  FILLER  PIC X (29)    VALUE SPACES.
+    48	      01  HEAD-2.
+    49		  02  FILLER  PIC X (31)    VALUE SPACES.
+    50		  02  FILLER  PIC X (17)    VALUE  ‘STA.MESA,
+    51		  MANILA’.
+    52		  02   FILLER PIC X(32)     VALUE SPACES.
+    53	      01  SUB-1.
+    54		  02 FILLER PIC X(34)	     VALUE SPACES.
+    55		  02 FILLER PIC X (12)	     VALUE ‘SALES REPORT’.
+    56		  02 FILLER PIC X(34)	     VALUE SPACES.
+    57	      01  SUB-2.
+    58		  02 FILLER PIC X(7)	     VALUE SPACES.
+    59		  02 FILLER PIC X(4)	     VALUE ‘AREA’.
+    60		  02 FILLER PIC X(7)	     VALUE SPACES.    61		  02 FILLER PIC X(8)	     VALUE ‘SALESMAN’.			15NOV25 07:44:19  PAGE	  2
+    62		  02 FILLER PIC X(16)	     VALUE SPACES.
+    63		  02 FILLER PIC X(8)	     VALUE ‘SALESMAN’.
+    64		  02 FILLER PIC X(15)	     VALUE SPACES.
+    65		  02 FILLER PIC X(6)	     VALUE ‘AMOUNT’.
+    66		  02 FILLER PIC X(9)	     VALUE SPACES.
+    67	      01  SUB-3.
+    68		  02 FILLER PIC X(7)	     VALUE SPACES.
+    69		  02 FILLER PIC X(4)	     VALUE ‘CODE’.
+    70		  02 FILLER PIC X(8)	     VALUE SPACES.
+    71		  02 FILLER PIC X(6)	     VALUE ‘NUMBER’.
+    72		  02 FILLER PIC X(18)	     VALUE SPACES.
+    73		  02 FILLER PIC X(4)	     VALUE ‘NAME’.
+    74		  02 FILLER PIC X(33)	     VALUE SPACES.
+    75	      01  DETALYE.
+    76		  02 FILER PIC X(9)	     VALUE SPACES.
+    77		  02 P-AC PIC X.
+    78		  02 FILLER PIC X (10)	     VALUE SPACES.
+    79		  02 P-SNO PIC 9(5).
+    80		  02 FILLER PIC X (8)	     VALUE SPACES.
+    81		  02 P-SNA PIC X (25).
+    82		  02 FILLER PIC X(7)	     VALUES SPACES.
+    83		  02 P-AMT PIC 99,999.99.
+    84		  02 FILLER PIC X(6)	     VALUE SPACES.
+    85	      01  TOTAL-1.
+    86		  02 FILLER PIC X (7)	     VALUE SPACES.
+    87		  02 FILLER PIC X (9)	     VALUE ‘TOTAL NO.’.
+    88		  02 FILLER PIC X (12)	     VALUE ‘OF SALESMEN:’.
+    89		  02 FILLER PIC X (9)	     VALUE SPACES.
+    90		  02 P-TNS PIC 9,999.
+    91		  02 FILLER PIC X (38)	     VALUE SPACES.
+    92	      01  TOTAL-2.
+    93		  02 FILLER PIC X (7)	     VALUE SPACES.
+    94		  02 FILLER PIC X (6)	     VALUE ‘TOTAL ’.
+    95		  02 FILLER PIC X (11)	     VALUE ‘ACCUMULATED’.
+    96		  02 FILLER PIC X (8)	     VALUE ‘ AMOUNT:’.
+    97		  02 FILLER PIC X(4)	     VALUE ‘ PHP’.
+    98		  02 P-TA PIC 9,999,999.99.
+    99		  02 FILLER PIC X (33)	      VALUE SPACES.
+   100	      SCREEN SECTION.
+   101	      01 SCRE.
+   102		  02 BLANK SCREEN.
+   103	      PROCEDURE DIVISION.
+   104	      MAIN-RTN.
+   105		  PERFORM INIT-RTN THRU INIT-RTN-END.
+   106		  PERFORM PROCESS-RTN UNTIL EOFSW = 1.
+   107		  PERFORM FINISH-RTN.
+   108		  STOP RUN.
+   109	      INIT-RTN.
+   110		  OPEN INPUT INFILE,  OUTPUT OUTFILE.
+   111		  READ INFILE AT END PERFORM END-RTN
+   112		  GO TO INIT-RTN-END.
+   113		  MOVE AC TO SVAC.
+   114		  PERFORM HEADING-RTN.
+   115	      INIT-RTN-END.
+   116	      END-RTN.
+   117		  MOVE 1 TO EOFSW.
+   118		  DISPLAY ‘EMPTY FILE’ LINE 3 COLUMN 20.
+   119	      HEADING-RTN.
+   120		  WRITE OUTREC FROM HEAD-1 AFTER PAGE.   121		  WRITE OUTREC FROM HEAD-2 AFTER 1.					15NOV25 07:44:19  PAGE	  3
+   122		  WRITE OUTREC FROM SUB-1 AFTER 3.
+   123		  WRITE OUTREC FROM SUB-2 AFTER 2.
+   124		  WRITE OUTREC FROM SUB-3 AFTER 1.
+   125	      PROCESS-RTN.
+   126		  DISPLAY SCRE.
+   127		  IF SVAC NOT = AC PERFORM AC-BREAK-RTN.
+   128		  MOVE AC TO P-AC.
+   129		  MOVE SNO TO P-SNO.
+   130		  MOVE SNA TO P-SNA.
+   131		  MOVE AMT TO P-AMT.
+   132		  WRITE OUTREC FROM DETALYE AFTER 1.
+   133		  ADD 1 TO TNS giving tns.
+   134		  ADD AMT TO TA giving ta.
+   135		  READ INFILE AT END MOVE 1 TO EOFSW PERFORM
+   136		  AC-BREAK-RTN.
+   137	      AC-BREAK-RTN.
+   138		  MOVE TNS TO P-TNS.
+   139		  WRITE OUTREC FROM TOTAL-1 AFTER 3.
+   140		  MOVE TA TO P-TA.
+   141		  WRITE OUTREC FROM TOTAL-2 AFTER 1.
+   142		  MOVE 0 TO TNS, TA.
+   143		  MOVE AC TO SVAC.
+   144	      FINISH-RTN.
+   145		  CLOSE INFILE, OUTFILE.
+   146		  DISPLAY ‘TAPOS NA’ LINE 6 COLUMN 20.Realia COBOL Version 4.000   SN: 01-07732  C:TRIAL2.COB 				15NOV25 07:44:19  PAGE	  4
+
+LINE ERR# LVL			 ERROR TEXT
+
+  15 0908 W Invalid character ignored in column 36
+  15 0908 W Invalid character ignored in column 37
+  15 0908 W Invalid character ignored in column 38
+  15 0123 W Space assumed after '.'
+  15 0115 E Unrecognizable word or literal 'TXT'
+  15 0908 W Invalid character ignored in column 48
+  15 0908 W Invalid character ignored in column 49
+  15 0908 W Invalid character ignored in column 50
+  15 0115 E Unrecognizable word or literal '.'
+  16 0908 W Invalid character ignored in column 37
+  16 0908 W Invalid character ignored in column 38
+  16 0908 W Invalid character ignored in column 39
+  16 0908 W Invalid character ignored in column 45
+  16 0908 W Invalid character ignored in column 46
+  16 0908 W Invalid character ignored in column 47
+  44 0115 E Unrecognizable word or literal '('
+  44 0115 E Unrecognizable word or literal ')'
+  44 0138 W Period assumed before ')'
+  44 0254 W FILLER group assumed after previous element for ')'
+  44 0257 E No PICTURE supplied for ')'
+  44 0274 E Non-numeric VALUE invalid for numeric item ')'
+  45 0908 W Invalid character ignored in column 44
+  45 0908 W Invalid character ignored in column 45
+  45 0908 W Invalid character ignored in column 46
+  45 0488 E Data-name 'SAN' not defined
+  45 0115 E Unrecognizable word or literal 'MIGUEL'
+  46 0115 E Unrecognizable word or literal 'CORPORATION'
+  46 0908 W Invalid character ignored in column 23
+  46 0908 W Invalid character ignored in column 24
+  46 0908 W Invalid character ignored in column 25
+  47 0115 E Unrecognizable word or literal '('
+  47 0115 E Unrecognizable word or literal ')'
+  47 0138 W Period assumed before ')'
+  47 0254 W FILLER group assumed after previous element for ')'
+  47 0257 E No PICTURE supplied for ')'
+  47 0274 E Non-numeric VALUE invalid for numeric item ')'
+  49 0115 E Unrecognizable word or literal '('
+  49 0115 E Unrecognizable word or literal ')'
+  49 0138 W Period assumed before ')'
+  49 0254 W FILLER group assumed after previous element for ')'
+  49 0257 E No PICTURE supplied for ')'
+  49 0274 E Non-numeric VALUE invalid for numeric item ')'
+  50 0115 E Unrecognizable word or literal '('
+  50 0115 E Unrecognizable word or literal ')'
+  50 0138 W Period assumed before ')'
+  50 0254 W FILLER group assumed after previous element for ')'
+  50 0257 E No PICTURE supplied for ')'
+  50 0274 E Non-numeric VALUE invalid for numeric item ')'
+  50 0908 W Invalid character ignored in column 45
+  50 0908 W Invalid character ignored in column 46
+  50 0908 W Invalid character ignored in column 47
+  50 0488 E Data-name 'STA' not defined
+  50 0123 W Space assumed after '.'
+  50 0115 E Unrecognizable word or literal 'MESA'
+  51 0115 E Unrecognizable word or literal 'MANILA'
+  51 0908 W Invalid character ignored in column 18Realia COBOL Version 4.000   SN: 01-07732  C:TRIAL2.COB 				15NOV25 07:44:19  PAGE	  5
+
+LINE ERR# LVL			 ERROR TEXT
+
+  51 0908 W Invalid character ignored in column 19
+  51 0908 W Invalid character ignored in column 20
+  51 0115 E Unrecognizable word or literal '.'
+  55 0115 E Unrecognizable word or literal '('
+  55 0115 E Unrecognizable word or literal ')'
+  55 0138 W Period assumed before ')'
+  55 0254 W FILLER group assumed after previous element for ')'
+  55 0257 E No PICTURE supplied for ')'
+  55 0274 E Non-numeric VALUE invalid for numeric item ')'
+  55 0908 W Invalid character ignored in column 45
+  55 0908 W Invalid character ignored in column 46
+  55 0908 W Invalid character ignored in column 47
+  55 0488 E Data-name 'SALES' not defined
+  55 0115 E Unrecognizable word or literal 'REPORT'
+  55 0908 W Invalid character ignored in column 60
+  55 0908 W Invalid character ignored in column 61
+  55 0908 W Invalid character ignored in column 62
+  59 0908 W Invalid character ignored in column 45
+  59 0908 W Invalid character ignored in column 46
+  59 0908 W Invalid character ignored in column 47
+  59 0115 E Unrecognizable word or literal 'AREA'
+  59 0293 E VALUE 'AREA' invalid; must be figurative constant or literal
+  59 0908 W Invalid character ignored in column 52
+  59 0908 W Invalid character ignored in column 53
+  59 0908 W Invalid character ignored in column 54
+  61 0908 W Invalid character ignored in column 45
+  61 0908 W Invalid character ignored in column 46
+  61 0908 W Invalid character ignored in column 47
+  61 0488 E Data-name 'SALESMAN' not defined
+  61 0908 W Invalid character ignored in column 56
+  61 0908 W Invalid character ignored in column 57
+  61 0908 W Invalid character ignored in column 58
+  63 0908 W Invalid character ignored in column 45
+  63 0908 W Invalid character ignored in column 46
+  63 0908 W Invalid character ignored in column 47
+  63 0488 E Data-name 'SALESMAN' not defined
+  63 0908 W Invalid character ignored in column 56
+  63 0908 W Invalid character ignored in column 57
+  63 0908 W Invalid character ignored in column 58
+  65 0908 W Invalid character ignored in column 45
+  65 0908 W Invalid character ignored in column 46
+  65 0908 W Invalid character ignored in column 47
+  65 0488 E Data-name 'AMOUNT' not defined
+  65 0908 W Invalid character ignored in column 54
+  65 0908 W Invalid character ignored in column 55
+  65 0908 W Invalid character ignored in column 56
+  69 0908 W Invalid character ignored in column 45
+  69 0908 W Invalid character ignored in column 46
+  69 0908 W Invalid character ignored in column 47
+  69 0115 E Unrecognizable word or literal 'CODE'
+  69 0293 E VALUE 'CODE' invalid; must be figurative constant or literal
+  69 0908 W Invalid character ignored in column 52
+  69 0908 W Invalid character ignored in column 53
+  69 0908 W Invalid character ignored in column 54
+  71 0908 W Invalid character ignored in column 45
+  71 0908 W Invalid character ignored in column 46Realia COBOL Version 4.000   SN: 01-07732  C:TRIAL2.COB 				15NOV25 07:44:19  PAGE	  6
+
+LINE ERR# LVL			 ERROR TEXT
+
+  71 0908 W Invalid character ignored in column 47
+  71 0115 E Unrecognizable word or literal 'NUMBER'
+  71 0293 E VALUE 'NUMBER' invalid; must be figurative constant or literal
+  71 0908 W Invalid character ignored in column 54
+  71 0908 W Invalid character ignored in column 55
+  71 0908 W Invalid character ignored in column 56
+  73 0908 W Invalid character ignored in column 45
+  73 0908 W Invalid character ignored in column 46
+  73 0908 W Invalid character ignored in column 47
+  73 0488 E Data-name 'NAME' not defined
+  73 0908 W Invalid character ignored in column 52
+  73 0908 W Invalid character ignored in column 53
+  73 0908 W Invalid character ignored in column 54
+  78 0115 E Unrecognizable word or literal '('
+  78 0115 E Unrecognizable word or literal ')'
+  78 0138 W Period assumed before ')'
+  78 0254 W FILLER group assumed after previous element for ')'
+  78 0257 E No PICTURE supplied for ')'
+  78 0274 E Non-numeric VALUE invalid for numeric item ')'
+  80 0115 E Unrecognizable word or literal '('
+  80 0115 E Unrecognizable word or literal ')'
+  80 0138 W Period assumed before ')'
+  80 0254 W FILLER group assumed after previous element for ')'
+  80 0257 E No PICTURE supplied for ')'
+  80 0274 E Non-numeric VALUE invalid for numeric item ')'
+  81 0115 E Unrecognizable word or literal '('
+  81 0115 E Unrecognizable word or literal ')'
+  81 0138 W Period assumed before ')'
+  81 0254 W FILLER group assumed after previous element for ')'
+  81 0257 E No PICTURE supplied for ')'
+  82 0115 E Unrecognizable word or literal 'VALUES'
+  82 0115 E Unrecognizable word or literal 'SPACES'
+  86 0115 E Unrecognizable word or literal '('
+  86 0115 E Unrecognizable word or literal ')'
+  86 0138 W Period assumed before ')'
+  86 0254 W FILLER group assumed after previous element for ')'
+  86 0257 E No PICTURE supplied for ')'
+  86 0274 E Non-numeric VALUE invalid for numeric item ')'
+  87 0115 E Unrecognizable word or literal '('
+  87 0115 E Unrecognizable word or literal ')'
+  87 0138 W Period assumed before ')'
+  87 0254 W FILLER group assumed after previous element for ')'
+  87 0257 E No PICTURE supplied for ')'
+  87 0274 E Non-numeric VALUE invalid for numeric item ')'
+  87 0908 W Invalid character ignored in column 45
+  87 0908 W Invalid character ignored in column 46
+  87 0908 W Invalid character ignored in column 47
+  87 0488 E Data-name 'TOTAL' not defined
+  87 0115 E Unrecognizable word or literal 'NO'
+  87 0123 W Space assumed after '.'
+  87 0908 W Invalid character ignored in column 57
+  87 0908 W Invalid character ignored in column 58
+  87 0908 W Invalid character ignored in column 59
+  87 0115 E Unrecognizable word or literal '.'
+  88 0115 E Unrecognizable word or literal '('
+  88 0115 E Unrecognizable word or literal ')'Realia COBOL Version 4.000   SN: 01-07732  C:TRIAL2.COB 				15NOV25 07:44:19  PAGE	  7
+
+LINE ERR# LVL			 ERROR TEXT
+
+  88 0138 W Period assumed before ')'
+  88 0254 W FILLER group assumed after previous element for ')'
+  88 0257 E No PICTURE supplied for ')'
+  88 0908 W Invalid character ignored in column 45
+  88 0908 W Invalid character ignored in column 46
+  88 0908 W Invalid character ignored in column 47
+  88 0115 E Unrecognizable word or literal 'OF'
+  88 0293 E VALUE 'OF' invalid; must be figurative constant or literal
+  88 0115 E Unrecognizable word or literal 'SALESMEN'
+  88 0115 E Unrecognizable word or literal ':'
+  88 0908 W Invalid character ignored in column 60
+  88 0908 W Invalid character ignored in column 61
+  88 0908 W Invalid character ignored in column 62
+  89 0115 E Unrecognizable word or literal '('
+  89 0115 E Unrecognizable word or literal ')'
+  89 0138 W Period assumed before ')'
+  89 0254 W FILLER group assumed after previous element for ')'
+  89 0257 E No PICTURE supplied for ')'
+  89 0274 E Non-numeric VALUE invalid for numeric item ')'
+  91 0115 E Unrecognizable word or literal '('
+  91 0115 E Unrecognizable word or literal ')'
+  91 0138 W Period assumed before ')'
+  91 0254 W FILLER group assumed after previous element for ')'
+  91 0257 E No PICTURE supplied for ')'
+  91 0274 E Non-numeric VALUE invalid for numeric item ')'
+  93 0115 E Unrecognizable word or literal '('
+  93 0115 E Unrecognizable word or literal ')'
+  93 0138 W Period assumed before ')'
+  93 0254 W FILLER group assumed after previous element for ')'
+  93 0257 E No PICTURE supplied for ')'
+  93 0274 E Non-numeric VALUE invalid for numeric item ')'
+  94 0115 E Unrecognizable word or literal '('
+  94 0115 E Unrecognizable word or literal ')'
+  94 0138 W Period assumed before ')'
+  94 0254 W FILLER group assumed after previous element for ')'
+  94 0257 E No PICTURE supplied for ')'
+  94 0274 E Non-numeric VALUE invalid for numeric item ')'
+  94 0908 W Invalid character ignored in column 45
+  94 0908 W Invalid character ignored in column 46
+  94 0908 W Invalid character ignored in column 47
+  94 0488 E Data-name 'TOTAL' not defined
+  94 0908 W Invalid character ignored in column 54
+  94 0908 W Invalid character ignored in column 55
+  94 0908 W Invalid character ignored in column 56
+  95 0115 E Unrecognizable word or literal '('
+  95 0115 E Unrecognizable word or literal ')'
+  95 0138 W Period assumed before ')'
+  95 0254 W FILLER group assumed after previous element for ')'
+  95 0257 E No PICTURE supplied for ')'
+  95 0274 E Non-numeric VALUE invalid for numeric item ')'
+  95 0908 W Invalid character ignored in column 45
+  95 0908 W Invalid character ignored in column 46
+  95 0908 W Invalid character ignored in column 47
+  95 0488 E Data-name 'ACCUMULATED' not defined
+  95 0908 W Invalid character ignored in column 59
+  95 0908 W Invalid character ignored in column 60Realia COBOL Version 4.000   SN: 01-07732  C:TRIAL2.COB 				15NOV25 07:44:19  PAGE	  8
+
+LINE ERR# LVL			 ERROR TEXT
+
+  95 0908 W Invalid character ignored in column 61
+  96 0115 E Unrecognizable word or literal '('
+  96 0115 E Unrecognizable word or literal ')'
+  96 0138 W Period assumed before ')'
+  96 0254 W FILLER group assumed after previous element for ')'
+  96 0257 E No PICTURE supplied for ')'
+  96 0274 E Non-numeric VALUE invalid for numeric item ')'
+  96 0908 W Invalid character ignored in column 45
+  96 0908 W Invalid character ignored in column 46
+  96 0908 W Invalid character ignored in column 47
+  96 0488 E Data-name 'AMOUNT' not defined
+  96 0115 E Unrecognizable word or literal ':'
+  96 0908 W Invalid character ignored in column 56
+  96 0908 W Invalid character ignored in column 57
+  96 0908 W Invalid character ignored in column 58
+  97 0908 W Invalid character ignored in column 45
+  97 0908 W Invalid character ignored in column 46
+  97 0908 W Invalid character ignored in column 47
+  97 0488 E Data-name 'PHP' not defined
+  97 0908 W Invalid character ignored in column 52
+  97 0908 W Invalid character ignored in column 53
+  97 0908 W Invalid character ignored in column 54
+  99 0115 E Unrecognizable word or literal '('
+  99 0115 E Unrecognizable word or literal ')'
+  99 0138 W Period assumed before ')'
+  99 0254 W FILLER group assumed after previous element for ')'
+  99 0257 E No PICTURE supplied for ')'
+  99 0274 E Non-numeric VALUE invalid for numeric item ')'
+ 118 0908 W Invalid character ignored in column 20
+ 118 0908 W Invalid character ignored in column 21
+ 118 0908 W Invalid character ignored in column 22
+ 118 0784 E Undefined symbol 'EMPTY'
+ 118 0115 E Unrecognizable word or literal 'FILE'
+ 118 0908 W Invalid character ignored in column 33
+ 118 0908 W Invalid character ignored in column 34
+ 118 0908 W Invalid character ignored in column 35
+ 146 0908 W Invalid character ignored in column 20
+ 146 0908 W Invalid character ignored in column 21
+ 146 0908 W Invalid character ignored in column 22
+ 146 0784 E Undefined symbol 'TAPOS'
+ 146 0784 E Undefined symbol 'NA'
+ 146 0908 W Invalid character ignored in column 31
+ 146 0908 W Invalid character ignored in column 32
+ 146 0908 W Invalid character ignored in column 33
+
+trial2	 has 159 Warning  + 109 E Level  messagesRealia COBOL Version 4.000   SN: 01-07732  C:TRIAL2.COB 				15NOV25 07:44:19  PAGE	  9
+
+                                        
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     146
+			Compilation time (mm:ss.hh):  0:03.90
+			Compilation speed (lines/minute):  2246
+
+			Compilation date (yy/mm/dd): 25/11/15
+			     Time of day (hh:mm:ss): 07:44:21
+
+			Source length in LST file:000005822
