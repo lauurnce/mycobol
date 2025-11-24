@@ -166,7 +166,6 @@
                MOVE TR-ACCT-NAME TO PREV-ACCT-NAME
            END-IF.
 
-      * Calculate Balance (Deposit adds, Withdrawal subtracts)
            IF IS-DEPOSIT
                ADD TR-AMOUNT TO WS-ACCT-BALANCE
            ELSE
