@@ -1,8 +1,0 @@
-0001002001Juan Dela Cruz           D000500000
-0001002001Juan Dela Cruz           W000100000
-0001002001Juan Dela Cruz           D000200050
-0001002002Maria Clara              D001000000
-0001002002Maria Clara              W000500000
-0001002003Jose Rizal               D050000000
-0001002003Jose Rizal               W010000000
-0001002003Jose Rizal               W005000000
