@@ -6,10 +6,10 @@
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
            SELECT TRANS-FILE ASSIGN TO "transactions.txt"
-               ORGANIZATION IS LINE SEQUENTIAL.
+               ORGANIZATION IS SEQUENTIAL.
 
            SELECT REPORT-FILE ASSIGN TO "report.out"
-               ORGANIZATION IS LINE SEQUENTIAL.
+               ORGANIZATION IS SEQUENTIAL.
 
        DATA DIVISION.
        FILE SECTION.
