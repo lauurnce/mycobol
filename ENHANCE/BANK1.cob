@@ -1,6 +1,6 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BANK-REPORT.
-      *AUTHOR.     LAWRENCE PANES.
+       AUTHOR.     GEMINI.
 
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
@@ -39,6 +39,7 @@
            05 WS-ACCT-BALANCE   PIC S9(7)V99 VALUE 0.
            05 WS-TOTAL-BALANCE  PIC S9(10)V99 VALUE 0.
            05 WS-REC-COUNT      PIC 9(4) VALUE 0.
+           05 LINES-REMAINING   PIC 9(2) VALUE 10.
 
        01  HEADING-1.
            05 FILLER            PIC X(32) VALUE SPACES.
@@ -56,50 +57,50 @@
            05 FILLER            PIC X(35) VALUE SPACES.
 
        01  HEADING-4.
-           05 FILLER            PIC X(17) VALUE SPACES.
+           05 FILLER            PIC X(32) VALUE SPACES.
            05 FILLER            PIC X(16) VALUE "Account's Report".
-           05 FILLER            PIC X(47) VALUE SPACES.
+           05 FILLER            PIC X(32) VALUE SPACES.
 
        01  HEADING-5.
-           05 FILLER            PIC X(4)  VALUE SPACES.
+           05 FILLER            PIC X(12) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Account".
-           05 FILLER            PIC X(25) VALUE SPACES.
+           05 FILLER            PIC X(14) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Account".
-           05 FILLER            PIC X(16) VALUE SPACES.
+           05 FILLER            PIC X(20) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Balance".
-           05 FILLER            PIC X(15) VALUE SPACES.
+           05 FILLER            PIC X(13) VALUE SPACES.
 
        01  HEADING-6.
-           05 FILLER            PIC X(8)  VALUE SPACES.
+           05 FILLER            PIC X(12) VALUE SPACES.
            05 FILLER            PIC X(6)  VALUE "Number".
-           05 FILLER            PIC X(23) VALUE SPACES.
+           05 FILLER            PIC X(15) VALUE SPACES.
            05 FILLER            PIC X(4)  VALUE "Name".
-           05 FILLER            PIC X(39) VALUE SPACES.
+           05 FILLER            PIC X(43) VALUE SPACES.
 
        01  DETAIL-LINE.
-           05 FILLER            PIC X(4)  VALUE SPACES.
+           05 FILLER            PIC X(10) VALUE SPACES.
            05 DL-ACCT-NO        PIC X(10).
            05 FILLER            PIC X(10) VALUE SPACES.
            05 DL-ACCT-NAME      PIC X(25).
-           05 FILLER            PIC X(2)  VALUE SPACES.
-           05 DL-BALANCE        PIC Z,ZZZ,ZZ9.99.
-           05 FILLER            PIC X(14) VALUE SPACES.
+           05 FILLER            PIC X(8)  VALUE SPACES.
+           05 DL-BALANCE        PIC ZZZ,ZZZ,ZZ9.99.
+           05 FILLER            PIC X(3)  VALUE SPACES.
 
        01  FOOTER-COUNT.
-           05 FILLER            PIC X(4)  VALUE SPACES.
+           05 FILLER            PIC X(7)  VALUE SPACES.
            05 FILLER            PIC X(29) VALUE
               "Total No. of Records printed:".
            05 FILLER            PIC X(1)  VALUE SPACE.
-           05 FT-COUNT          PIC ZZZ9.
+           05 FT-COUNT          PIC Z9.
            05 FILLER            PIC X(41) VALUE SPACES.
 
        01  FOOTER-TOTAL.
-           05 FILLER            PIC X(4)  VALUE SPACES.
-           05 FILLER            PIC X(27) VALUE
-              "Total Accumulated Balance: ".
-           05 FILLER            PIC X(1)  VALUE "P".
+           05 FILLER            PIC X(7)  VALUE SPACES.
+           05 FILLER            PIC X(28) VALUE
+              "Total Accumulated Balance: P".
+           05 FILLER            PIC X(1)  VALUE SPACE.
            05 FT-TOTAL-BAL      PIC Z,ZZZ,ZZZ,ZZ9.99.
-           05 FILLER            PIC X(26) VALUE SPACES.
+           05 FILLER            PIC X(30) VALUE SPACES.
 
        PROCEDURE DIVISION.
        000-MAIN-LOGIC.
@@ -130,9 +131,10 @@
            STOP RUN.
 
        100-PRINT-HEADINGS.
-           WRITE PRINT-LINE FROM HEADING-1.
-           WRITE PRINT-LINE FROM HEADING-2.
-           WRITE PRINT-LINE FROM HEADING-3.
+           MOVE 10 TO LINES-REMAINING.
+           WRITE PRINT-LINE FROM HEADING-1 AFTER PAGE.
+           WRITE PRINT-LINE FROM HEADING-2 AFTER 1.
+           WRITE PRINT-LINE FROM HEADING-3 AFTER 1.
            
            MOVE SPACES TO PRINT-LINE.
            WRITE PRINT-LINE.
@@ -170,11 +172,16 @@
            END-READ.
 
        300-PRINT-DETAIL.
+           IF LINES-REMAINING = 0
+               PERFORM 100-PRINT-HEADINGS
+           END-IF.
+
            MOVE PREV-ACCT-NO TO DL-ACCT-NO.
            MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
            MOVE WS-ACCT-BALANCE TO DL-BALANCE.
            
-           WRITE PRINT-LINE FROM DETAIL-LINE.
+           WRITE PRINT-LINE FROM DETAIL-LINE AFTER 1.
+           SUBTRACT 1 FROM LINES-REMAINING.
 
            ADD 1 TO WS-REC-COUNT.
            ADD WS-ACCT-BALANCE TO WS-TOTAL-BALANCE.
