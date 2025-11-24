@@ -1,0 +1,33 @@
+0001002001Kai Sotto                D000500000
+0001002001Kai Sotto                W000100000
+0001002001Kai Sotto                D000200050
+0001002002Justin Brownlee          D001000000
+0001002002Justin Brownlee          W000500000
+0001002003Junmar Fajardo           D050000000
+0001002003Junmar Fajardo           W010000000
+0001002003Junmar Fajardo           W005000000
+0001002004Kezia Lorein Villegas    D002500000
+0001002004Kezia Lorein Villegas    W000300000
+0001002004Kezia Lorein Villegas    D000100000
+0001002005LA Tenorio               D000750000
+0001002005LA Tenorio               W000250000
+0001002006Scottie Thompson         D001200000
+0001002006Scottie Thompson         W000400000
+0001002007Paul Lee                 D000600000
+0001002007Paul Lee                 W000150000
+0001002008Mark Barroca             D000900000
+0001002008Mark Barroca             W000300000
+0001002009RR Garcia                D000800000
+0001002009RR Garcia                W000200000
+0001002010Bobby Ray Parks Jr.      D001500000
+0001002010Bobby Ray Parks Jr.      W000500000
+0001002011Jason Perkins            D002000000
+0001002011Jason Perkins            W000600000
+0001002012Allyn Bulanadi           D000400000
+0001002012Allyn Bulanadi           W000100000
+0001002013Troy Rosario             D001100000
+0001002013Troy Rosario             W000300000
+0001002014Mac Belo                 D000700000
+0001002014Mac Belo                 W000200000
+0001002015Kiefer Ravena            D001300000
+0001002015Kiefer Ravena            W000400000
