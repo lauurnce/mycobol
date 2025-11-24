@@ -63,11 +63,11 @@
        01  HEADING-5.
            05 FILLER            PIC X(4)  VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Account".
-           05 FILLER            PIC X(21) VALUE SPACES.
+           05 FILLER            PIC X(26) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Account".
            05 FILLER            PIC X(16) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Balance".
-           05 FILLER            PIC X(19) VALUE SPACES.
+           05 FILLER            PIC X(14) VALUE SPACES.
 
        01  HEADING-6.
            05 FILLER            PIC X(8)  VALUE SPACES.
