@@ -91,9 +91,9 @@
            05 FILLER            PIC X(29) VALUE
               "Total No. of Records printed:".
            05 FILLER            PIC X(1)  VALUE SPACE.
-      * FIX: Changed Z9 to ZZZ9 to fit records up to 9999
+
            05 FT-COUNT          PIC ZZZ9.
-      * FIX: Adjusted filler from 41 to 39 to keep line length 80
+
            05 FILLER            PIC X(39) VALUE SPACES.
 
        01  FOOTER-TOTAL.
@@ -193,7 +193,6 @@
            WRITE PRINT-LINE.
            WRITE PRINT-LINE.
 
-      * FIX: Move to the variable FT-COUNT, not the picture string
            MOVE WS-REC-COUNT TO FT-COUNT.
            WRITE PRINT-LINE FROM FOOTER-COUNT.
 
