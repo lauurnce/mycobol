@@ -39,7 +39,6 @@
            05 WS-TOTAL-BALANCE  PIC S9(12)V99 VALUE 0.
            05 WS-REC-COUNT      PIC 9(4) VALUE 0.
 
-      * Output Formats (Centering based on 80-char width)
        01  HEADING-1.
            05 FILLER            PIC X(32) VALUE SPACES.
            05 FILLER            PIC X(16) VALUE "China Trust Bank".
