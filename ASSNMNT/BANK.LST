@@ -1,4 +1,4 @@
-     1	      IDENTIFICATION DIVISION.							25NOV25 02:42:18  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							25NOV25 02:48:41  PAGE	  1
      2	      PROGRAM-ID. BANK-REPORT.
      3	     *AUTHOR.	  LAWRENCE PANES.
      4
@@ -46,9 +46,9 @@
     46		  05 FILLER	       PIC X(32) VALUE SPACES.
     47
     48	      01  HEADING-2.
-    49		  05 FILLER	       PIC X(33) VALUE SPACES.
+    49		  05 FILLER	       PIC X(25) VALUE SPACES.
     50            05 FILLER            PIC X(13) VALUE "Makati Avenue".
-    51		  05 FILLER	       PIC X(34) VALUE SPACES.
+    51		  05 FILLER	       PIC X(42) VALUE SPACES.
     52
     53	      01  HEADING-3.
     54		  05 FILLER	       PIC X(34) VALUE SPACES.
@@ -57,7 +57,7 @@
     57
     58	      01  HEADING-4.
     59		  05 FILLER	       PIC X(32) VALUE SPACES.
-    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:42:18  PAGE	  2
+    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:48:41  PAGE	  2
     62
     63	      01  HEADING-5.
     64		  05 FILLER	       PIC X(7)  VALUE SPACES.
@@ -105,7 +105,7 @@
    106		  05 FILLER	       PIC X(5)  VALUE SPACES.
    107		  05 FILLER	       PIC X(27) VALUE
    108               "Total Accumulated Balance: ".
-   109            05 FILLER            PIC X(2)  VALUE "P ".
+   109            05 FILLER            PIC X(1)  VALUE "P".
    110		  05 FT-TOTAL-BAL      PIC Z,ZZZ,ZZZ,ZZ9.99.
    111		  05 FILLER	       PIC X(25) VALUE SPACES.
    112
@@ -116,7 +116,7 @@
    117
    118		  PERFORM 100-PRINT-HEADINGS.
    119
-   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:42:18  PAGE	  3
+   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:48:41  PAGE	  3
    122		  END-READ.
    123
    124		  IF NOT END-OF-FILE
@@ -175,7 +175,7 @@
    177
    178		  READ TRANS-FILE
    179		      AT END SET END-OF-FILE TO TRUE
-   180		  END-READ.   181											25NOV25 02:42:18  PAGE	  4
+   180		  END-READ.   181											25NOV25 02:48:41  PAGE	  4
    182	      300-PRINT-DETAIL.
    183		  MOVE PREV-ACCT-NO TO DL-ACCT-NO.
    184		  MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
@@ -195,15 +195,15 @@
    198		  WRITE PRINT-LINE FROM FOOTER-COUNT.
    199
    200		  MOVE WS-TOTAL-BALANCE TO FT-TOTAL-BAL.
-   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:42:18  PAGE	  5
+   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:48:41  PAGE	  5
 
 
 
 				    Segment Table
 			Segment    Number     Length	    Name
 
-			  C00	     05        0481	 BANK$REPORT$C00
-			  D00	     06        05B5	 BANK$REPORT$D00
+			  C00	     05        0480	 BANK$REPORT$C00
+			  D00	     06        05B3	 BANK$REPORT$D00
 
 
 			Realia COBOL Compiler Version Information
@@ -243,10 +243,10 @@
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     201
-			Compilation time (mm:ss.hh):  0:02.20
-			Compilation speed (lines/minute):  5481
+			Compilation time (mm:ss.hh):  0:04.50
+			Compilation speed (lines/minute):  2680
 
 			Compilation date (yy/mm/dd): 25/11/25
-			     Time of day (hh:mm:ss): 02:42:19
+			     Time of day (hh:mm:ss): 02:48:42
 
-			Source length in LST file:000007399
+			Source length in LST file:000007398
