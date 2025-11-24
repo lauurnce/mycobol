@@ -147,7 +147,7 @@
            WRITE PRINT-LINE.
 
            WRITE PRINT-LINE FROM HEADING-4.
-           
+
            MOVE SPACES TO PRINT-LINE.
            WRITE PRINT-LINE.
 
@@ -155,7 +155,6 @@
            WRITE PRINT-LINE FROM HEADING-6.
            WRITE PRINT-LINE FROM HEADING-7.
            
-      * Extra blank line before data starts
            MOVE SPACES TO PRINT-LINE.
            WRITE PRINT-LINE.
 
