@@ -159,7 +159,6 @@
            WRITE PRINT-LINE.
 
        200-PROCESS-DATA.
-      * Check for Control Break (Change in Account Number)
            IF TR-ACCT-NO NOT = PREV-ACCT-NO
                PERFORM 300-PRINT-DETAIL
                MOVE 0 TO WS-ACCT-BALANCE
