@@ -185,7 +185,6 @@
            
            WRITE PRINT-LINE FROM DETAIL-LINE.
 
-      * Accumulate Grand Totals
            ADD 1 TO WS-REC-COUNT.
            ADD WS-ACCT-BALANCE TO WS-TOTAL-BALANCE.
 
