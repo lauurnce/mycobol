@@ -5,10 +5,10 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-           SELECT TRANS-FILE ASSIGN TO "TRANS.txt"
+           SELECT TRANS-FILE ASSIGN TO "TRANS.TXT"
                ORGANIZATION IS SEQUENTIAL.
 
-           SELECT REPORT-FILE ASSIGN TO "report.out"
+           SELECT REPORT-FILE ASSIGN TO "REPORT.OUT"
                ORGANIZATION IS SEQUENTIAL.
 
        DATA DIVISION.
@@ -21,7 +21,7 @@
               88 IS-DEPOSIT     VALUE 'D'.
               88 IS-WITHDRAWAL  VALUE 'W'.
            05 TR-AMOUNT         PIC 9(7)V99.
-           05 FILLER PIC X(2).
+           05 FILLER            PIC X(2).
 
        FD  REPORT-FILE.
        01  PRINT-LINE           PIC X(80).
@@ -61,29 +61,29 @@
            05 FILLER            PIC X(32) VALUE SPACES.
 
        01  HEADING-5.
-           05 FILLER            PIC X(5)  VALUE SPACES.
+           05 FILLER            PIC X(7)  VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Account".
-           05 FILLER            PIC X(24) VALUE SPACES.
+           05 FILLER            PIC X(21) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Account".
-           05 FILLER            PIC X(20) VALUE SPACES.
+           05 FILLER            PIC X(16) VALUE SPACES.
            05 FILLER            PIC X(7)  VALUE "Balance".
-           05 FILLER            PIC X(10) VALUE SPACES.
+           05 FILLER            PIC X(15) VALUE SPACES.
 
        01  HEADING-6.
-           05 FILLER            PIC X(5)  VALUE SPACES.
+           05 FILLER            PIC X(8)  VALUE SPACES.
            05 FILLER            PIC X(6)  VALUE "Number".
-           05 FILLER            PIC X(25) VALUE SPACES.
+           05 FILLER            PIC X(23) VALUE SPACES.
            05 FILLER            PIC X(4)  VALUE "Name".
-           05 FILLER            PIC X(40) VALUE SPACES.
+           05 FILLER            PIC X(39) VALUE SPACES.
 
        01  HEADING-7.
-           05 FILLER            PIC X(5)  VALUE SPACES.
+           05 FILLER            PIC X(8)  VALUE SPACES.
            05 FILLER            PIC X(5)  VALUE "X(10)".
-           05 FILLER            PIC X(26) VALUE SPACES.
+           05 FILLER            PIC X(23) VALUE SPACES.
            05 FILLER            PIC X(5)  VALUE "X(25)".
-           05 FILLER            PIC X(18) VALUE SPACES.
+           05 FILLER            PIC X(13) VALUE SPACES.
            05 FILLER            PIC X(14) VALUE "ZZZ,ZZZ,ZZ9.99".
-           05 FILLER            PIC X(7)  VALUE SPACES.
+           05 FILLER            PIC X(12) VALUE SPACES.
 
        01  DETAIL-LINE.
            05 FILLER            PIC X(5)  VALUE SPACES.
