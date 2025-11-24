@@ -86,20 +86,20 @@
            05 FILLER            PIC X(11) VALUE SPACES.
 
        01  FOOTER-COUNT.
-           05 FILLER            PIC X(5)  VALUE SPACES.
+           05 FILLER            PIC X(4)  VALUE SPACES.
            05 FILLER            PIC X(29) VALUE
               "Total No. of Records printed:".
            05 FILLER            PIC X(1)  VALUE SPACE.
            05 FT-COUNT          PIC ZZZ9.
-           05 FILLER            PIC X(40) VALUE SPACES.
+           05 FILLER            PIC X(41) VALUE SPACES.
 
        01  FOOTER-TOTAL.
-           05 FILLER            PIC X(5)  VALUE SPACES.
+           05 FILLER            PIC X(4)  VALUE SPACES.
            05 FILLER            PIC X(27) VALUE
               "Total Accumulated Balance: ".
            05 FILLER            PIC X(1)  VALUE "P".
            05 FT-TOTAL-BAL      PIC Z,ZZZ,ZZZ,ZZ9.99.
-           05 FILLER            PIC X(25) VALUE SPACES.
+           05 FILLER            PIC X(26) VALUE SPACES.
 
        PROCEDURE DIVISION.
        000-MAIN-LOGIC.
