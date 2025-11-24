@@ -21,6 +21,7 @@
               88 IS-DEPOSIT     VALUE 'D'.
               88 IS-WITHDRAWAL  VALUE 'W'.
            05 TR-AMOUNT         PIC 9(7)V99.
+           05 FILLER PIC X(2).
 
        FD  REPORT-FILE.
        01  PRINT-LINE           PIC X(80).
