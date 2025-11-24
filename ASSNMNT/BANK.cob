@@ -147,8 +147,7 @@
            WRITE PRINT-LINE.
 
            WRITE PRINT-LINE FROM HEADING-4.
-
-      * 1 blank space (line) as requested
+           
            MOVE SPACES TO PRINT-LINE.
            WRITE PRINT-LINE.
 
