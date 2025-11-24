@@ -5,11 +5,9 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-      * Points to the input transaction file
            SELECT TRANS-FILE ASSIGN TO "transactions.txt"
                ORGANIZATION IS LINE SEQUENTIAL.
 
-      * Points to the output report file
            SELECT REPORT-FILE ASSIGN TO "report.out"
                ORGANIZATION IS LINE SEQUENTIAL.
 
