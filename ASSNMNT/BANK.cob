@@ -127,7 +127,6 @@
 
            PERFORM 200-PROCESS-DATA UNTIL END-OF-FILE.
 
-      * Process the very last group after EOF is reached
            IF PREV-ACCT-NO NOT = SPACES
                PERFORM 300-PRINT-DETAIL
            END-IF.
