@@ -56,9 +56,9 @@
            05 FILLER            PIC X(35) VALUE SPACES.
 
        01  HEADING-4.
-           05 FILLER            PIC X(25) VALUE SPACES.
+           05 FILLER            PIC X(15) VALUE SPACES.
            05 FILLER            PIC X(16) VALUE "Account's Report".
-           05 FILLER            PIC X(39) VALUE SPACES.
+           05 FILLER            PIC X(49) VALUE SPACES.
 
        01  HEADING-5.
            05 FILLER            PIC X(7)  VALUE SPACES.
