@@ -8,11 +8,11 @@
     Account			    Account		   Balance
 	Number			     Name
 
-     0001002001 	 Kai Sotto			   6,000.50
-     0001002002 	 Justin Brownlee		   5,000.00
-     0001002003 	 Junmar Fajardo 		 350,000.00
-     0001002004 	 Kezia Lorein Villegas		  25,000.00
+    0001002001		Kai Sotto			  6,000.50
+    0001002002		Justin Brownlee 		  5,000.00
+    0001002003		Junmar Fajardo			350,000.00
+    0001002004		Kezia Lorein Villegas		 25,000.00
 
 
-     Total No. of Records printed:    4
-     Total Accumulated Balance: P      386,000.50
+    Total No. of Records printed:    4
+    Total Accumulated Balance: P      386,000.50
