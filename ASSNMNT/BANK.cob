@@ -36,7 +36,7 @@
 
        01  WS-CALCS.
            05 WS-ACCT-BALANCE   PIC S9(7)V99 VALUE 0.
-           05 WS-TOTAL-BALANCE  PIC S9(12)V99 VALUE 0.
+           05 WS-TOTAL-BALANCE  PIC S9(10)V99 VALUE 0.
            05 WS-REC-COUNT      PIC 9(4) VALUE 0.
 
        01  HEADING-1.
