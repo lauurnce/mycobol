@@ -90,8 +90,8 @@
            05 FILLER            PIC X(29) VALUE
               "Total No. of Records printed:".
            05 FILLER            PIC X(1)  VALUE SPACE.
-           05 FT-COUNT          PIC 99.
-           05 FILLER            PIC X(42) VALUE SPACES.
+           05 FT-COUNT          PIC ZZZ9.
+           05 FILLER            PIC X(40) VALUE SPACES.
 
        01  FOOTER-TOTAL.
            05 FILLER            PIC X(5)  VALUE SPACES.
