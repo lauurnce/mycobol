@@ -1,14 +1,14 @@
-     1	      IDENTIFICATION DIVISION.							25NOV25 02:29:36  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							25NOV25 02:42:18  PAGE	  1
      2	      PROGRAM-ID. BANK-REPORT.
      3	     *AUTHOR.	  LAWRENCE PANES.
      4
      5	      ENVIRONMENT DIVISION.
      6	      INPUT-OUTPUT SECTION.
      7	      FILE-CONTROL.
-     8            SELECT TRANS-FILE ASSIGN TO "TRANS.txt"
+     8            SELECT TRANS-FILE ASSIGN TO "TRANS.TXT"
      9		      ORGANIZATION IS SEQUENTIAL.
     10
-    11            SELECT REPORT-FILE ASSIGN TO "report.out"
+    11            SELECT REPORT-FILE ASSIGN TO "REPORT.OUT"
     12		      ORGANIZATION IS SEQUENTIAL.
     13
     14	      DATA DIVISION.
@@ -21,7 +21,7 @@
     21               88 IS-DEPOSIT     VALUE 'D'.
     22               88 IS-WITHDRAWAL  VALUE 'W'.
     23		  05 TR-AMOUNT	       PIC 9(7)V99.
-    24		  05 FILLER PIC X(2).
+    24		  05 FILLER	       PIC X(2).
     25
     26	      FD  REPORT-FILE.
     27	      01  PRINT-LINE	       PIC X(80).
@@ -57,32 +57,32 @@
     57
     58	      01  HEADING-4.
     59		  05 FILLER	       PIC X(32) VALUE SPACES.
-    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:29:36  PAGE	  2
+    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:42:18  PAGE	  2
     62
     63	      01  HEADING-5.
-    64		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    64		  05 FILLER	       PIC X(7)  VALUE SPACES.
     65            05 FILLER            PIC X(7)  VALUE "Account".
-    66		  05 FILLER	       PIC X(24) VALUE SPACES.
+    66		  05 FILLER	       PIC X(21) VALUE SPACES.
     67            05 FILLER            PIC X(7)  VALUE "Account".
-    68		  05 FILLER	       PIC X(20) VALUE SPACES.
+    68		  05 FILLER	       PIC X(16) VALUE SPACES.
     69            05 FILLER            PIC X(7)  VALUE "Balance".
-    70		  05 FILLER	       PIC X(10) VALUE SPACES.
+    70		  05 FILLER	       PIC X(15) VALUE SPACES.
     71
     72	      01  HEADING-6.
-    73		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    73		  05 FILLER	       PIC X(8)  VALUE SPACES.
     74            05 FILLER            PIC X(6)  VALUE "Number".
-    75		  05 FILLER	       PIC X(25) VALUE SPACES.
+    75		  05 FILLER	       PIC X(23) VALUE SPACES.
     76            05 FILLER            PIC X(4)  VALUE "Name".
-    77		  05 FILLER	       PIC X(40) VALUE SPACES.
+    77		  05 FILLER	       PIC X(39) VALUE SPACES.
     78
     79	      01  HEADING-7.
-    80		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    80		  05 FILLER	       PIC X(8)  VALUE SPACES.
     81            05 FILLER            PIC X(5)  VALUE "X(10)".
-    82		  05 FILLER	       PIC X(26) VALUE SPACES.
+    82		  05 FILLER	       PIC X(23) VALUE SPACES.
     83            05 FILLER            PIC X(5)  VALUE "X(25)".
-    84		  05 FILLER	       PIC X(18) VALUE SPACES.
+    84		  05 FILLER	       PIC X(13) VALUE SPACES.
     85            05 FILLER            PIC X(14) VALUE "ZZZ,ZZZ,ZZ9.99".
-    86		  05 FILLER	       PIC X(7)  VALUE SPACES.
+    86		  05 FILLER	       PIC X(12) VALUE SPACES.
     87
     88	      01  DETAIL-LINE.
     89		  05 FILLER	       PIC X(5)  VALUE SPACES.
@@ -116,7 +116,7 @@
    117
    118		  PERFORM 100-PRINT-HEADINGS.
    119
-   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:29:36  PAGE	  3
+   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:42:18  PAGE	  3
    122		  END-READ.
    123
    124		  IF NOT END-OF-FILE
@@ -175,7 +175,7 @@
    177
    178		  READ TRANS-FILE
    179		      AT END SET END-OF-FILE TO TRUE
-   180		  END-READ.   181											25NOV25 02:29:36  PAGE	  4
+   180		  END-READ.   181											25NOV25 02:42:18  PAGE	  4
    182	      300-PRINT-DETAIL.
    183		  MOVE PREV-ACCT-NO TO DL-ACCT-NO.
    184		  MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
@@ -195,7 +195,7 @@
    198		  WRITE PRINT-LINE FROM FOOTER-COUNT.
    199
    200		  MOVE WS-TOTAL-BALANCE TO FT-TOTAL-BAL.
-   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:29:36  PAGE	  5
+   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:42:18  PAGE	  5
 
 
 
@@ -243,10 +243,10 @@
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     201
-			Compilation time (mm:ss.hh):  0:02.36
-			Compilation speed (lines/minute):  5110
+			Compilation time (mm:ss.hh):  0:02.20
+			Compilation speed (lines/minute):  5481
 
 			Compilation date (yy/mm/dd): 25/11/25
-			     Time of day (hh:mm:ss): 02:29:37
+			     Time of day (hh:mm:ss): 02:42:19
 
-			Source length in LST file:000007392
+			Source length in LST file:000007399
