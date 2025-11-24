@@ -76,15 +76,6 @@
            05 FILLER            PIC X(4)  VALUE "Name".
            05 FILLER            PIC X(39) VALUE SPACES.
 
-       01  HEADING-7.
-           05 FILLER            PIC X(8)  VALUE SPACES.
-           05 FILLER            PIC X(5)  VALUE "X(10)".
-           05 FILLER            PIC X(23) VALUE SPACES.
-           05 FILLER            PIC X(5)  VALUE "X(25)".
-           05 FILLER            PIC X(13) VALUE SPACES.
-           05 FILLER            PIC X(14) VALUE "ZZZ,ZZZ,ZZ9.99".
-           05 FILLER            PIC X(12) VALUE SPACES.
-
        01  DETAIL-LINE.
            05 FILLER            PIC X(5)  VALUE SPACES.
            05 DL-ACCT-NO        PIC X(10).
