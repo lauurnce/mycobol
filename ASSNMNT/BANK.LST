@@ -1,4 +1,4 @@
-     1	      IDENTIFICATION DIVISION.							25NOV25 02:52:29  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							25NOV25 02:53:51  PAGE	  1
      2	      PROGRAM-ID. BANK-REPORT.
      3	     *AUTHOR.	  LAWRENCE PANES.
      4
@@ -56,8 +56,8 @@
     56		  05 FILLER	       PIC X(35) VALUE SPACES.
     57
     58	      01  HEADING-4.
-    59		  05 FILLER	       PIC X(15) VALUE SPACES.
-    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(49) VALUE SPACES.				25NOV25 02:52:29  PAGE	  2
+    59		  05 FILLER	       PIC X(18) VALUE SPACES.
+    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(46) VALUE SPACES.				25NOV25 02:53:51  PAGE	  2
     62
     63	      01  HEADING-5.
     64		  05 FILLER	       PIC X(7)  VALUE SPACES.
@@ -116,7 +116,7 @@
    117
    118		  PERFORM 100-PRINT-HEADINGS.
    119
-   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:52:29  PAGE	  3
+   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:53:51  PAGE	  3
    122		  END-READ.
    123
    124		  IF NOT END-OF-FILE
@@ -175,7 +175,7 @@
    177
    178		  READ TRANS-FILE
    179		      AT END SET END-OF-FILE TO TRUE
-   180		  END-READ.   181											25NOV25 02:52:29  PAGE	  4
+   180		  END-READ.   181											25NOV25 02:53:51  PAGE	  4
    182	      300-PRINT-DETAIL.
    183		  MOVE PREV-ACCT-NO TO DL-ACCT-NO.
    184		  MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
@@ -195,7 +195,7 @@
    198		  WRITE PRINT-LINE FROM FOOTER-COUNT.
    199
    200		  MOVE WS-TOTAL-BALANCE TO FT-TOTAL-BAL.
-   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:52:29  PAGE	  5
+   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:53:51  PAGE	  5
 
 
 
@@ -243,10 +243,10 @@
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     201
-			Compilation time (mm:ss.hh):  0:02.25
-			Compilation speed (lines/minute):  5360
+			Compilation time (mm:ss.hh):  0:05.38
+			Compilation speed (lines/minute):  2241
 
 			Compilation date (yy/mm/dd): 25/11/25
-			     Time of day (hh:mm:ss): 02:52:30
+			     Time of day (hh:mm:ss): 02:53:52
 
 			Source length in LST file:000007398
