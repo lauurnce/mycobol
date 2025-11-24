@@ -1,4 +1,4 @@
-     1	      IDENTIFICATION DIVISION.							25NOV25 02:16:16  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							25NOV25 02:25:22  PAGE	  1
      2	      PROGRAM-ID. BANK-REPORT.
      3	     *AUTHOR.	  LAWRENCE PANES.
      4
@@ -21,180 +21,181 @@
     21               88 IS-DEPOSIT     VALUE 'D'.
     22               88 IS-WITHDRAWAL  VALUE 'W'.
     23		  05 TR-AMOUNT	       PIC 9(7)V99.
-    24
-    25	      FD  REPORT-FILE.
-    26	      01  PRINT-LINE	       PIC X(80).
-    27
-    28	      WORKING-STORAGE SECTION.
-    29	      01  WS-FLAGS.
-    30            05 WS-EOF            PIC X VALUE 'N'.
-    31               88 END-OF-FILE    VALUE 'Y'.
-    32
-    33	      01  WS-HOLDERS.
-    34		  05 PREV-ACCT-NO      PIC X(10) VALUE SPACES.
-    35		  05 PREV-ACCT-NAME    PIC X(25) VALUE SPACES.
-    36
-    37	      01  WS-CALCS.
-    38		  05 WS-ACCT-BALANCE   PIC S9(7)V99 VALUE 0.
-    39		  05 WS-TOTAL-BALANCE  PIC S9(10)V99 VALUE 0.
-    40		  05 WS-REC-COUNT      PIC 9(4) VALUE 0.
-    41
-    42	      01  HEADING-1.
-    43		  05 FILLER	       PIC X(32) VALUE SPACES.
-    44            05 FILLER            PIC X(16) VALUE "China Trust Bank".
-    45		  05 FILLER	       PIC X(32) VALUE SPACES.
-    46
-    47	      01  HEADING-2.
-    48		  05 FILLER	       PIC X(33) VALUE SPACES.
-    49            05 FILLER            PIC X(13) VALUE "Makati Avenue".
-    50		  05 FILLER	       PIC X(34) VALUE SPACES.
-    51
-    52	      01  HEADING-3.
-    53		  05 FILLER	       PIC X(34) VALUE SPACES.
-    54            05 FILLER            PIC X(11) VALUE "Makati City".
-    55		  05 FILLER	       PIC X(35) VALUE SPACES.
-    56
-    57	      01  HEADING-4.
-    58		  05 FILLER	       PIC X(32) VALUE SPACES.
-    59            05 FILLER            PIC X(16) VALUE "Account's Report".
-    60		  05 FILLER	       PIC X(32) VALUE SPACES.    61											25NOV25 02:16:16  PAGE	  2
-    62	      01  HEADING-5.
-    63		  05 FILLER	       PIC X(5)  VALUE SPACES.
-    64            05 FILLER            PIC X(7)  VALUE "Account".
-    65		  05 FILLER	       PIC X(24) VALUE SPACES.
-    66            05 FILLER            PIC X(7)  VALUE "Account".
-    67		  05 FILLER	       PIC X(20) VALUE SPACES.
-    68            05 FILLER            PIC X(7)  VALUE "Balance".
-    69		  05 FILLER	       PIC X(10) VALUE SPACES.
-    70
-    71	      01  HEADING-6.
-    72		  05 FILLER	       PIC X(5)  VALUE SPACES.
-    73            05 FILLER            PIC X(6)  VALUE "Number".
-    74		  05 FILLER	       PIC X(25) VALUE SPACES.
-    75            05 FILLER            PIC X(4)  VALUE "Name".
-    76		  05 FILLER	       PIC X(40) VALUE SPACES.
-    77
-    78	      01  HEADING-7.
-    79		  05 FILLER	       PIC X(5)  VALUE SPACES.
-    80            05 FILLER            PIC X(5)  VALUE "X(10)".
-    81		  05 FILLER	       PIC X(26) VALUE SPACES.
-    82            05 FILLER            PIC X(5)  VALUE "X(25)".
-    83		  05 FILLER	       PIC X(18) VALUE SPACES.
-    84            05 FILLER            PIC X(14) VALUE "ZZZ,ZZZ,ZZ9.99".
-    85		  05 FILLER	       PIC X(7)  VALUE SPACES.
-    86
-    87	      01  DETAIL-LINE.
-    88		  05 FILLER	       PIC X(5)  VALUE SPACES.
-    89		  05 DL-ACCT-NO        PIC X(10).
-    90		  05 FILLER	       PIC X(10) VALUE SPACES.
-    91		  05 DL-ACCT-NAME      PIC X(25).
-    92		  05 FILLER	       PIC X(5)  VALUE SPACES.
-    93		  05 DL-BALANCE        PIC Z,ZZZ,ZZ9.99.
-    94		  05 FILLER	       PIC X(10) VALUE SPACES.
-    95
-    96	      01  FOOTER-COUNT.
-    97		  05 FILLER	       PIC X(5)  VALUE SPACES.
-    98		  05 FILLER	       PIC X(29) VALUE
-    99               "Total No. of Records printed:".
-   100		  05 FILLER	       PIC X(1)  VALUE SPACE.
-   101		  05 FT-COUNT	       PIC ZZZ9.
-   102		  05 FILLER	       PIC X(40) VALUE SPACES.
-   103
-   104	      01  FOOTER-TOTAL.
-   105		  05 FILLER	       PIC X(5)  VALUE SPACES.
-   106		  05 FILLER	       PIC X(27) VALUE
-   107               "Total Accumulated Balance: ".
-   108            05 FILLER            PIC X(2)  VALUE "P ".
-   109		  05 FT-TOTAL-BAL      PIC Z,ZZZ,ZZZ,ZZ9.99.
-   110		  05 FILLER	       PIC X(25) VALUE SPACES.
-   111
-   112	      PROCEDURE DIVISION.
-   113	      000-MAIN-LOGIC.
-   114		  OPEN INPUT TRANS-FILE
-   115		       OUTPUT REPORT-FILE.
-   116
-   117		  PERFORM 100-PRINT-HEADINGS.
-   118
-   119		  READ TRANS-FILE
-   120		      AT END SET END-OF-FILE TO TRUE   121		  END-READ.								25NOV25 02:16:16  PAGE	  3
-   122
-   123		  IF NOT END-OF-FILE
-   124		      MOVE TR-ACCT-NO TO PREV-ACCT-NO
-   125		      MOVE TR-ACCT-NAME TO PREV-ACCT-NAME
-   126		  END-IF.
-   127
-   128		  PERFORM 200-PROCESS-DATA UNTIL END-OF-FILE.
-   129
-   130		  IF PREV-ACCT-NO NOT = SPACES
-   131		      PERFORM 300-PRINT-DETAIL
-   132		  END-IF.
-   133
-   134		  PERFORM 400-PRINT-FOOTER.
-   135
-   136		  CLOSE TRANS-FILE
-   137			REPORT-FILE.
-   138		  STOP RUN.
-   139
-   140	      100-PRINT-HEADINGS.
-   141		  WRITE PRINT-LINE FROM HEADING-1.
-   142		  WRITE PRINT-LINE FROM HEADING-2.
-   143		  WRITE PRINT-LINE FROM HEADING-3.
-   144
-   145		  MOVE SPACES TO PRINT-LINE.
-   146		  WRITE PRINT-LINE.
+    24		  05 FILLER PIC X(2).
+    25
+    26	      FD  REPORT-FILE.
+    27	      01  PRINT-LINE	       PIC X(80).
+    28
+    29	      WORKING-STORAGE SECTION.
+    30	      01  WS-FLAGS.
+    31            05 WS-EOF            PIC X VALUE 'N'.
+    32               88 END-OF-FILE    VALUE 'Y'.
+    33
+    34	      01  WS-HOLDERS.
+    35		  05 PREV-ACCT-NO      PIC X(10) VALUE SPACES.
+    36		  05 PREV-ACCT-NAME    PIC X(25) VALUE SPACES.
+    37
+    38	      01  WS-CALCS.
+    39		  05 WS-ACCT-BALANCE   PIC S9(7)V99 VALUE 0.
+    40		  05 WS-TOTAL-BALANCE  PIC S9(10)V99 VALUE 0.
+    41		  05 WS-REC-COUNT      PIC 9(4) VALUE 0.
+    42
+    43	      01  HEADING-1.
+    44		  05 FILLER	       PIC X(32) VALUE SPACES.
+    45            05 FILLER            PIC X(16) VALUE "China Trust Bank".
+    46		  05 FILLER	       PIC X(32) VALUE SPACES.
+    47
+    48	      01  HEADING-2.
+    49		  05 FILLER	       PIC X(33) VALUE SPACES.
+    50            05 FILLER            PIC X(13) VALUE "Makati Avenue".
+    51		  05 FILLER	       PIC X(34) VALUE SPACES.
+    52
+    53	      01  HEADING-3.
+    54		  05 FILLER	       PIC X(34) VALUE SPACES.
+    55            05 FILLER            PIC X(11) VALUE "Makati City".
+    56		  05 FILLER	       PIC X(35) VALUE SPACES.
+    57
+    58	      01  HEADING-4.
+    59		  05 FILLER	       PIC X(32) VALUE SPACES.
+    60            05 FILLER            PIC X(16) VALUE "Account's Report".    61		  05 FILLER	       PIC X(32) VALUE SPACES.				25NOV25 02:25:22  PAGE	  2
+    62
+    63	      01  HEADING-5.
+    64		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    65            05 FILLER            PIC X(7)  VALUE "Account".
+    66		  05 FILLER	       PIC X(24) VALUE SPACES.
+    67            05 FILLER            PIC X(7)  VALUE "Account".
+    68		  05 FILLER	       PIC X(20) VALUE SPACES.
+    69            05 FILLER            PIC X(7)  VALUE "Balance".
+    70		  05 FILLER	       PIC X(10) VALUE SPACES.
+    71
+    72	      01  HEADING-6.
+    73		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    74            05 FILLER            PIC X(6)  VALUE "Number".
+    75		  05 FILLER	       PIC X(25) VALUE SPACES.
+    76            05 FILLER            PIC X(4)  VALUE "Name".
+    77		  05 FILLER	       PIC X(40) VALUE SPACES.
+    78
+    79	      01  HEADING-7.
+    80		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    81            05 FILLER            PIC X(5)  VALUE "X(10)".
+    82		  05 FILLER	       PIC X(26) VALUE SPACES.
+    83            05 FILLER            PIC X(5)  VALUE "X(25)".
+    84		  05 FILLER	       PIC X(18) VALUE SPACES.
+    85            05 FILLER            PIC X(14) VALUE "ZZZ,ZZZ,ZZ9.99".
+    86		  05 FILLER	       PIC X(7)  VALUE SPACES.
+    87
+    88	      01  DETAIL-LINE.
+    89		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    90		  05 DL-ACCT-NO        PIC X(10).
+    91		  05 FILLER	       PIC X(10) VALUE SPACES.
+    92		  05 DL-ACCT-NAME      PIC X(25).
+    93		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    94		  05 DL-BALANCE        PIC Z,ZZZ,ZZ9.99.
+    95		  05 FILLER	       PIC X(10) VALUE SPACES.
+    96
+    97	      01  FOOTER-COUNT.
+    98		  05 FILLER	       PIC X(5)  VALUE SPACES.
+    99		  05 FILLER	       PIC X(29) VALUE
+   100               "Total No. of Records printed:".
+   101		  05 FILLER	       PIC X(1)  VALUE SPACE.
+   102		  05 FT-COUNT	       PIC ZZZ9.
+   103		  05 FILLER	       PIC X(40) VALUE SPACES.
+   104
+   105	      01  FOOTER-TOTAL.
+   106		  05 FILLER	       PIC X(5)  VALUE SPACES.
+   107		  05 FILLER	       PIC X(27) VALUE
+   108               "Total Accumulated Balance: ".
+   109            05 FILLER            PIC X(2)  VALUE "P ".
+   110		  05 FT-TOTAL-BAL      PIC Z,ZZZ,ZZZ,ZZ9.99.
+   111		  05 FILLER	       PIC X(25) VALUE SPACES.
+   112
+   113	      PROCEDURE DIVISION.
+   114	      000-MAIN-LOGIC.
+   115		  OPEN INPUT TRANS-FILE
+   116		       OUTPUT REPORT-FILE.
+   117
+   118		  PERFORM 100-PRINT-HEADINGS.
+   119
+   120		  READ TRANS-FILE   121		      AT END SET END-OF-FILE TO TRUE					25NOV25 02:25:22  PAGE	  3
+   122		  END-READ.
+   123
+   124		  IF NOT END-OF-FILE
+   125		      MOVE TR-ACCT-NO TO PREV-ACCT-NO
+   126		      MOVE TR-ACCT-NAME TO PREV-ACCT-NAME
+   127		  END-IF.
+   128
+   129		  PERFORM 200-PROCESS-DATA UNTIL END-OF-FILE.
+   130
+   131		  IF PREV-ACCT-NO NOT = SPACES
+   132		      PERFORM 300-PRINT-DETAIL
+   133		  END-IF.
+   134
+   135		  PERFORM 400-PRINT-FOOTER.
+   136
+   137		  CLOSE TRANS-FILE
+   138			REPORT-FILE.
+   139		  STOP RUN.
+   140
+   141	      100-PRINT-HEADINGS.
+   142		  WRITE PRINT-LINE FROM HEADING-1.
+   143		  WRITE PRINT-LINE FROM HEADING-2.
+   144		  WRITE PRINT-LINE FROM HEADING-3.
+   145
+   146		  MOVE SPACES TO PRINT-LINE.
    147		  WRITE PRINT-LINE.
-   148
-   149		  WRITE PRINT-LINE FROM HEADING-4.
-   150
-   151		  MOVE SPACES TO PRINT-LINE.
-   152		  WRITE PRINT-LINE.
-   153
-   154		  WRITE PRINT-LINE FROM HEADING-5.
-   155		  WRITE PRINT-LINE FROM HEADING-6.
-   156		  WRITE PRINT-LINE FROM HEADING-7.
-   157
-   158		  MOVE SPACES TO PRINT-LINE.
-   159		  WRITE PRINT-LINE.
-   160
-   161	      200-PROCESS-DATA.
-   162		  IF TR-ACCT-NO NOT = PREV-ACCT-NO
-   163		      PERFORM 300-PRINT-DETAIL
-   164		      MOVE 0 TO WS-ACCT-BALANCE
-   165		      MOVE TR-ACCT-NO TO PREV-ACCT-NO
-   166		      MOVE TR-ACCT-NAME TO PREV-ACCT-NAME
-   167		  END-IF.
-   168
-   169		  IF IS-DEPOSIT
-   170		      ADD TR-AMOUNT TO WS-ACCT-BALANCE
-   171		  ELSE
-   172		      IF IS-WITHDRAWAL
-   173			  SUBTRACT TR-AMOUNT FROM WS-ACCT-BALANCE
-   174		      END-IF
-   175		  END-IF.
-   176
-   177		  READ TRANS-FILE
-   178		      AT END SET END-OF-FILE TO TRUE
-   179		  END-READ.
-   180   181	      300-PRINT-DETAIL. 							25NOV25 02:16:16  PAGE	  4
-   182		  MOVE PREV-ACCT-NO TO DL-ACCT-NO.
-   183		  MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
-   184		  MOVE WS-ACCT-BALANCE TO DL-BALANCE.
-   185
-   186		  WRITE PRINT-LINE FROM DETAIL-LINE.
-   187
-   188		  ADD 1 TO WS-REC-COUNT.
-   189		  ADD WS-ACCT-BALANCE TO WS-TOTAL-BALANCE.
-   190
-   191	      400-PRINT-FOOTER.
-   192		  MOVE SPACES TO PRINT-LINE.
-   193		  WRITE PRINT-LINE.
+   148		  WRITE PRINT-LINE.
+   149
+   150		  WRITE PRINT-LINE FROM HEADING-4.
+   151
+   152		  MOVE SPACES TO PRINT-LINE.
+   153		  WRITE PRINT-LINE.
+   154
+   155		  WRITE PRINT-LINE FROM HEADING-5.
+   156		  WRITE PRINT-LINE FROM HEADING-6.
+   157		  WRITE PRINT-LINE FROM HEADING-7.
+   158
+   159		  MOVE SPACES TO PRINT-LINE.
+   160		  WRITE PRINT-LINE.
+   161
+   162	      200-PROCESS-DATA.
+   163		  IF TR-ACCT-NO NOT = PREV-ACCT-NO
+   164		      PERFORM 300-PRINT-DETAIL
+   165		      MOVE 0 TO WS-ACCT-BALANCE
+   166		      MOVE TR-ACCT-NO TO PREV-ACCT-NO
+   167		      MOVE TR-ACCT-NAME TO PREV-ACCT-NAME
+   168		  END-IF.
+   169
+   170		  IF IS-DEPOSIT
+   171		      ADD TR-AMOUNT TO WS-ACCT-BALANCE
+   172		  ELSE
+   173		      IF IS-WITHDRAWAL
+   174			  SUBTRACT TR-AMOUNT FROM WS-ACCT-BALANCE
+   175		      END-IF
+   176		  END-IF.
+   177
+   178		  READ TRANS-FILE
+   179		      AT END SET END-OF-FILE TO TRUE
+   180		  END-READ.   181											25NOV25 02:25:22  PAGE	  4
+   182	      300-PRINT-DETAIL.
+   183		  MOVE PREV-ACCT-NO TO DL-ACCT-NO.
+   184		  MOVE PREV-ACCT-NAME TO DL-ACCT-NAME.
+   185		  MOVE WS-ACCT-BALANCE TO DL-BALANCE.
+   186
+   187		  WRITE PRINT-LINE FROM DETAIL-LINE.
+   188
+   189		  ADD 1 TO WS-REC-COUNT.
+   190		  ADD WS-ACCT-BALANCE TO WS-TOTAL-BALANCE.
+   191
+   192	      400-PRINT-FOOTER.
+   193		  MOVE SPACES TO PRINT-LINE.
    194		  WRITE PRINT-LINE.
-   195
-   196		  MOVE WS-REC-COUNT TO FT-COUNT.
-   197		  WRITE PRINT-LINE FROM FOOTER-COUNT.
-   198
-   199		  MOVE WS-TOTAL-BALANCE TO FT-TOTAL-BAL.
-   200		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:16:16  PAGE	  5
+   195		  WRITE PRINT-LINE.
+   196
+   197		  MOVE WS-REC-COUNT TO FT-COUNT.
+   198		  WRITE PRINT-LINE FROM FOOTER-COUNT.
+   199
+   200		  MOVE WS-TOTAL-BALANCE TO FT-TOTAL-BAL.
+   201		  WRITE PRINT-LINE FROM FOOTER-TOTAL.Realia COBOL Version 4.000   SN: 01-07732  C:BANK.COB					25NOV25 02:25:22  PAGE	  5
 
 
 
@@ -202,7 +203,7 @@
 			Segment    Number     Length	    Name
 
 			  C00	     05        0481	 BANK$REPORT$C00
-			  D00	     06        05B9	 BANK$REPORT$D00
+			  D00	     06        05BB	 BANK$REPORT$D00
 
 
 			Realia COBOL Compiler Version Information
@@ -241,11 +242,11 @@
 
 				    ERROR LEVEL LIMIT: W
 
-			Source lines compiled:	     200
-			Compilation time (mm:ss.hh):  0:03.68
-			Compilation speed (lines/minute):  3260
+			Source lines compiled:	     201
+			Compilation time (mm:ss.hh):  0:03.46
+			Compilation speed (lines/minute):  3485
 
 			Compilation date (yy/mm/dd): 25/11/25
-			     Time of day (hh:mm:ss): 02:16:17
+			     Time of day (hh:mm:ss): 02:25:23
 
-			Source length in LST file:000007375
+			Source length in LST file:000007399
