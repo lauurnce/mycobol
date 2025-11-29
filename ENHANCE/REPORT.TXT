@@ -1,1 +1,38 @@
-				China Trust Bank				 Makati Avenue				  Makati City                                Account's Report	    Account		 Account		    Balance	    Number		 Name	  0001002001	      Kai Sotto 			     6,000.50	  0001002002	      Justin Brownlee			     5,000.00	  0001002003	      Junmar Fajardo			   350,000.00	  0001002004	      Kezia Lorein Villegas		    23,000.00	  0001002005	      LA Tenorio			     5,000.00	  0001002006	      Scottie Thompson			     8,000.00	  0001002007	      Paul Lee				     4,500.00	  0001002008	      Mark Barroca			     6,000.00	  0001002009	      RR Garcia 			     6,000.00	  0001002010	      Bobby Ray Parks Jr.		    10,000.00				China Trust Bank				 Makati Avenue				  Makati City                                Account's Report	    Account		 Account		    Balance	    Number		 Name	  0001002011	      Jason Perkins			    14,000.00	  0001002012	      Allyn Bulanadi			     3,000.00	  0001002013	      Troy Rosario			     8,000.00	  0001002014	      Mac Belo				     5,000.00	  0001002015	      Kiefer Ravena			     9,000.00       Total No. of Records printed:   15       Total Accumulated Balance: P	  462,500.50
+				China Trust Bank
+				 Makati Avenue
+				  Makati City
+
+
+                                Account's Report
+
+	    Account		 Account		    Balance
+	    Number		 Name
+
+	  0001002001	      Kai Sotto 			     6,000.50
+	  0001002002	      Justin Brownlee			     5,000.00
+	  0001002003	      Junmar Fajardo			   350,000.00
+	  0001002004	      Kezia Lorein Villegas		    23,000.00
+	  0001002005	      LA Tenorio			     5,000.00
+	  0001002006	      Scottie Thompson			     8,000.00
+	  0001002007	      Paul Lee				     4,500.00
+	  0001002008	      Mark Barroca			     6,000.00
+	  0001002009	      RR Garcia 			     6,000.00
+	  0001002010	      Bobby Ray Parks Jr.		    10,000.00				China Trust Bank
+				 Makati Avenue
+				  Makati City
+
+
+                                Account's Report
+
+	    Account		 Account		    Balance
+	    Number		 Name
+
+	  0001002011	      Jason Perkins			    14,000.00
+	  0001002012	      Allyn Bulanadi			     3,000.00
+	  0001002013	      Troy Rosario			     8,000.00
+	  0001002014	      Mac Belo				     5,000.00
+	  0001002015	      Kiefer Ravena			     9,000.00
+
+
+       Total No. of Records printed:   15
+       Total Accumulated Balance: P	  462,500.50
