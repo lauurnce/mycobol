@@ -40,7 +40,7 @@
            05 WS-TOTAL-BALANCE  PIC S9(10)V99 VALUE 0.
            05 WS-REC-COUNT      PIC 9(4) VALUE 0.
            05 LINES-REMAINING   PIC 9(2) VALUE 10.
-
+      
        01  HEADING-1.
            05 FILLER            PIC X(32) VALUE SPACES.
            05 FILLER            PIC X(16) VALUE "China Trust Bank".

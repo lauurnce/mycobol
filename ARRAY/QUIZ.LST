@@ -1,0 +1,169 @@
+     1	      IDENTIFICATION DIVISION.							29NOV25 09:58:29  PAGE	  1
+     2	      PROGRAM-ID. GRADES.
+     3	      AUTHOR. Lawrence Panes.
+     4
+     5	      ENVIRONMENT DIVISION.
+     6	      INPUT-OUTPUT SECTION.
+     7	      FILE-CONTROL.
+     8            SELECT STUDENT-FILE ASSIGN TO 'INPUT.TXT'
+     9		      ORGANIZATION IS SEQUENTIAL.
+    10            SELECT REPORT-FILE  ASSIGN TO 'OUTPUT.TXT'.
+    11
+    12	      DATA DIVISION.
+    13	      FILE SECTION.
+    14
+    15	      FD  STUDENT-FILE
+    16		  LABEL RECORD IS STANDARD
+    17		  DATA RECORD IS INREC.
+    18	      01  INREC.
+    19		  02 SNO      PIC 9(5).
+    20		  02 SNA      PIC X(25).
+    21		  02 QUIZ     PIC 99 OCCURS 5 TIMES.
+    22
+    23	      FD  REPORT-FILE
+    24		  LABEL RECORD IS STANDARD.
+    25	      01  PRINT-LINE  PIC X(100).
+    26
+    27	      WORKING-STORAGE SECTION.
+    28	      01  WS-FLAGS.
+    29            05 EOF-SW        PIC X VALUE 'N'.
+    30
+    31	      01  WS-CALCS.
+    32		  05 SUB	   PIC 9.
+    33		  05 WS-TOTAL	   PIC 9(3).
+    34		  05 WS-AVG	   PIC 99V99.
+    35
+    36	      01  HEADER-1.
+    37		  05 FILLER	   PIC X(40) VALUE SPACES.
+    38            05 FILLER        PIC X(10) VALUE "PUP".
+    39		  05 FILLER	   PIC X(40) VALUE SPACES.
+    40
+    41	      01  HEADER-2.
+    42		  05 FILLER	   PIC X(40) VALUE SPACES.
+    43            05 FILLER        PIC X(10) VALUE "CCIS".
+    44		  05 FILLER	   PIC X(40) VALUE SPACES.
+    45
+    46	      01  HEADER-3.
+    47            05 FILLER        PIC X(15) VALUE "Student".
+    48            05 FILLER        PIC X(26) VALUE "Student".
+    49            05 FILLER        PIC X(8)  VALUE "Quiz".
+    50            05 FILLER        PIC X(8)  VALUE "Quiz".
+    51            05 FILLER        PIC X(8)  VALUE "Quiz".
+    52            05 FILLER        PIC X(8)  VALUE "Quiz".
+    53            05 FILLER        PIC X(8)  VALUE "Quiz".
+    54            05 FILLER        PIC X(10) VALUE "Average".
+    55
+    56	      01  HEADER-4.
+    57            05 FILLER        PIC X(15) VALUE "Number".
+    58            05 FILLER        PIC X(26) VALUE "Name".
+    59            05 FILLER        PIC X(8)  VALUE "1".
+    60            05 FILLER        PIC X(8)  VALUE "2".    61            05 FILLER        PIC X(8)  VALUE "3".                                 29NOV25 09:58:29  PAGE    2
+    62            05 FILLER        PIC X(8)  VALUE "4".
+    63            05 FILLER        PIC X(8)  VALUE "5".
+    64		  05 FILLER	   PIC X(10) VALUE SPACES.
+    65
+    66	      01  DETALYE.
+    67		  05 P-SNO	   PIC 9(5).
+    68		  05 FILLER	   PIC X(10) VALUE SPACES.
+    69		  05 P-SNA	   PIC X(25).
+    70		  05 FILLER	   PIC X(2)  VALUE SPACES.
+    71		  05 PRT-Q-GROUP OCCURS 5 TIMES.
+    72		     10 PRT-QUIZ   PIC 99.
+    73		     10 FILLER	   PIC X(6) VALUE SPACES.
+    74		  05 P-AVE	   PIC 99.99.
+    75
+    76	      PROCEDURE DIVISION.
+    77	      MAIN-PROCEDURE.
+    78		  OPEN INPUT STUDENT-FILE
+    79		       OUTPUT REPORT-FILE.
+    80
+    81		  PERFORM PRINT-HEADERS.
+    82
+    83		  READ STUDENT-FILE
+    84                 AT END MOVE 'Y' TO EOF-SW.
+    85
+    86            PERFORM PROCESS-RECORDS UNTIL EOF-SW = 'Y'.
+    87
+    88		  CLOSE STUDENT-FILE
+    89			REPORT-FILE.
+    90		  STOP RUN.
+    91
+    92	      PRINT-HEADERS.
+    93		  WRITE PRINT-LINE FROM HEADER-1 AFTER ADVANCING 1 LINE.
+    94		  WRITE PRINT-LINE FROM HEADER-2 AFTER ADVANCING 1 LINE.
+    95		  WRITE PRINT-LINE FROM HEADER-3 AFTER ADVANCING 2 LINES.
+    96		  WRITE PRINT-LINE FROM HEADER-4 AFTER ADVANCING 1 LINE.
+    97		  MOVE SPACES TO PRINT-LINE.
+    98		  WRITE PRINT-LINE AFTER ADVANCING 1 LINE.
+    99
+   100	      PROCESS-RECORDS.
+   101		  MOVE SNO TO P-SNO.
+   102		  MOVE SNA TO P-SNA.
+   103		  MOVE 0 TO WS-TOTAL.
+   104
+   105		  PERFORM VARYING SUB FROM 1 BY 1 UNTIL SUB > 5
+   106		     MOVE QUIZ(SUB) TO PRT-QUIZ(SUB)
+   107		     ADD QUIZ(SUB) TO WS-TOTAL
+   108		  END-PERFORM.
+   109
+   110		  COMPUTE WS-AVG = WS-TOTAL / 5.
+   111		  MOVE WS-AVG TO P-AVE.
+   112
+   113		  WRITE PRINT-LINE FROM DETALYE AFTER ADVANCING 1 LINE.
+   114
+   115		  READ STUDENT-FILE
+   116                 AT END MOVE 'Y' TO EOF-SW.Realia COBOL Version 4.000   SN: 01-07732  C:QUIZ.COB					29NOV25 09:58:29  PAGE	  3
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        02A3	 GRADES$C00
+			  D00	     06        0442	 GRADES$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     116
+			Compilation time (mm:ss.hh):  0:01.48
+			Compilation speed (lines/minute):  4702
+
+			Compilation date (yy/mm/dd): 25/11/29
+			     Time of day (hh:mm:ss): 09:58:30
+
+			Source length in LST file:000004297
