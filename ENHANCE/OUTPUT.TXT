@@ -1,12 +1,0 @@
-
-					PUP
-					CCIS
-
-Student        Student			 Quiz	 Quiz	 Quiz	 Quiz	 Quiz	 Average
-Number	       Name			 1	 2	 3	 4	 5
-
-12345	       Lawrence 		  90	  95	  99	  90	  85	  91.80
-12345	       Apphia			  70	  80	  90	  80	  97	  83.40
-12345	       Craig			  80	  79	  70	  90	  92	  82.20
-12345	       Denmar			  80	  98	  89	  88	  94	  89.80
-12345	       Harold			  85	  90	  78	  60	  95	  81.60
