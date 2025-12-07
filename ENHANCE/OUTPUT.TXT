@@ -1,0 +1,10 @@
+
+					PUP
+			      College of Computer and Information Sciences
+
+Student        Student			 Quiz	 Quiz	 Quiz	 Quiz	 Quiz	 Average
+Number	       Name			 1	 2	 3	 4	 5
+
+12345	       Lawrence 		  000	  000	  000	  000	  909	  081.80
+
+Total no. of Records.	1
