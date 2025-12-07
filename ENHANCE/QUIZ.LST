@@ -1,0 +1,228 @@
+     1	      IDENTIFICATION DIVISION.							06DEC25 03:46:46  PAGE	  1
+     2	      PROGRAM-ID. GRADES.
+     3	      AUTHOR. Lawrence Panes.
+     4
+     5	      ENVIRONMENT DIVISION.
+     6	      INPUT-OUTPUT SECTION.
+     7	      FILE-CONTROL.
+     8            SELECT STUDENT-FILE ASSIGN TO 'INPUT.TXT'
+     9		      ORGANIZATION IS SEQUENTIAL.
+    10            SELECT REPORT-FILE  ASSIGN TO 'OUTPUT.TXT'.
+    11
+    12	      DATA DIVISION.
+    13	      FILE SECTION.
+    14
+    15	      FD  STUDENT-FILE
+    16		  LABEL RECORD IS STANDARD
+    17		  DATA RECORD IS INREC.
+    18	      01  INREC.
+    19		  02 SNO	  PIC 9(5).
+    20		  02 SNA	  PIC X(25).
+    21	     * Changed per Requirement: Input is 1 Quiz + 1 Code per line
+    22		  02 IN-QUIZ	  PIC 999.
+    23		  02 IN-QCODE	  PIC 9.
+    24
+    25	      FD  REPORT-FILE
+    26		  LABEL RECORD IS STANDARD.
+    27	      01  PRINT-LINE  PIC X(100).
+    28
+    29	      WORKING-STORAGE SECTION.
+    30	      01  WS-FLAGS.
+    31            05 EOF-SW         PIC X VALUE 'N'.
+    32            05 FIRST-REC-SW   PIC X VALUE 'Y'.
+    33
+    34	      01  WS-CALCS.
+    35		  05 SUB	    PIC 9.
+    36		  05 WS-TOTAL	    PIC 9(3).
+    37		  05 WS-AVG	    PIC 99V99.
+    38	     * New Requirement: Counter for total students
+    39		  05 WS-STUDENT-CTR PIC 9(3) VALUE 0.
+    40
+    41	     * Buffer to hold data for the current student being processed
+    42	      01  WS-HOLD-STUDENT.
+    43		  05 WS-HOLD-SNO    PIC 9(5).
+    44		  05 WS-HOLD-SNA    PIC X(25).
+    45		  05 WS-HOLD-TBL.
+    46		     10 WS-HOLD-QUIZ PIC 9(3) OCCURS 5 TIMES.
+    47
+    48	      01  HEADER-1.
+    49		  05 FILLER	    PIC X(40) VALUE SPACES.
+    50            05 FILLER         PIC X(10) VALUE "PUP".
+    51		  05 FILLER	    PIC X(40) VALUE SPACES.
+    52
+    53	      01  HEADER-2.
+    54		  05 FILLER	    PIC X(30) VALUE SPACES.
+    55		  05 FILLER	    PIC X(45) VALUE
+    56               "College of Computer and Information Sciences".
+    57		  05 FILLER	    PIC X(15) VALUE SPACES.
+    58
+    59	      01  HEADER-3.
+    60            05 FILLER         PIC X(15) VALUE "Student".    61            05 FILLER         PIC X(26) VALUE "Student".                          06DEC25 03:46:46  PAGE    2
+    62            05 FILLER         PIC X(8)  VALUE "Quiz".
+    63            05 FILLER         PIC X(8)  VALUE "Quiz".
+    64            05 FILLER         PIC X(8)  VALUE "Quiz".
+    65            05 FILLER         PIC X(8)  VALUE "Quiz".
+    66            05 FILLER         PIC X(8)  VALUE "Quiz".
+    67            05 FILLER         PIC X(10) VALUE "Average".
+    68
+    69	      01  HEADER-4.
+    70            05 FILLER         PIC X(15) VALUE "Number".
+    71            05 FILLER         PIC X(26) VALUE "Name".
+    72            05 FILLER         PIC X(8)  VALUE "1".
+    73            05 FILLER         PIC X(8)  VALUE "2".
+    74            05 FILLER         PIC X(8)  VALUE "3".
+    75            05 FILLER         PIC X(8)  VALUE "4".
+    76            05 FILLER         PIC X(8)  VALUE "5".
+    77		  05 FILLER	    PIC X(10) VALUE SPACES.
+    78
+    79	      01  DETALYE.
+    80		  05 P-SNO	    PIC 9(5).
+    81		  05 FILLER	    PIC X(10) VALUE SPACES.
+    82		  05 P-SNA	    PIC X(25).
+    83		  05 FILLER	    PIC X(2)  VALUE SPACES.
+    84		  05 PRT-Q-GROUP OCCURS 5 TIMES.
+    85		     10 PRT-QUIZ    PIC 999.
+    86		     10 FILLER	    PIC X(5) VALUE SPACES.
+    87		  05 P-AVE	    PIC 999.99.
+    88
+    89	     * New Requirement: Footer line for Total Records
+    90	      01  TRAILER-1.
+    91            05 FILLER         PIC X(21) VALUE "Total no. of Records.".
+    92		  05 FILLER	    PIC X(1)  VALUE SPACES.
+    93		  05 P-TOTAL-CTR    PIC ZZ9.
+    94		  05 FILLER	    PIC X(75) VALUE SPACES.
+    95
+    96	      PROCEDURE DIVISION.
+    97	      MAIN-PROCEDURE.
+    98		  OPEN INPUT STUDENT-FILE
+    99		       OUTPUT REPORT-FILE.
+   100
+   101		  PERFORM PRINT-HEADERS.
+   102
+   103		  READ STUDENT-FILE
+   104                 AT END MOVE 'Y' TO EOF-SW.
+   105
+   106            IF EOF-SW = 'N'
+   107	     * Initialize the first student holder
+   108		      MOVE SNO TO WS-HOLD-SNO
+   109		      MOVE SNA TO WS-HOLD-SNA
+   110		      INITIALIZE WS-HOLD-TBL
+   111		  END-IF.
+   112
+   113            PERFORM PROCESS-RECORDS UNTIL EOF-SW = 'Y'.
+   114
+   115	     * Print the last student remaining in the buffer
+   116            IF FIRST-REC-SW = 'N'
+   117		      PERFORM PRINT-ROUTINE
+   118		  END-IF.
+   119
+   120	     * Print the Total Count at the end   121		  MOVE WS-STUDENT-CTR TO P-TOTAL-CTR.					06DEC25 03:46:46  PAGE	  3
+   122		  WRITE PRINT-LINE FROM SPACES AFTER ADVANCING 1 LINE.
+   123		  WRITE PRINT-LINE FROM TRAILER-1 AFTER ADVANCING 1 LINE.
+   124
+   125		  CLOSE STUDENT-FILE
+   126			REPORT-FILE.
+   127		  STOP RUN.
+   128
+   129	      PRINT-HEADERS.
+   130		  WRITE PRINT-LINE FROM HEADER-1 AFTER ADVANCING 1 LINE.
+   131		  WRITE PRINT-LINE FROM HEADER-2 AFTER ADVANCING 1 LINE.
+   132		  WRITE PRINT-LINE FROM SPACES AFTER ADVANCING 1 LINE.
+   133		  WRITE PRINT-LINE FROM HEADER-3 AFTER ADVANCING 1 LINE.
+   134		  WRITE PRINT-LINE FROM HEADER-4 AFTER ADVANCING 1 LINE.
+   135		  MOVE SPACES TO PRINT-LINE.
+   136		  WRITE PRINT-LINE AFTER ADVANCING 1 LINE.
+   137
+   138	      PROCESS-RECORDS.
+   139	     * Check if Student Number changed (Control Break)
+   140		  IF SNO NOT = WS-HOLD-SNO
+   141		      PERFORM PRINT-ROUTINE
+   142
+   143	     * Reset for the new student
+   144		      MOVE SNO TO WS-HOLD-SNO
+   145		      MOVE SNA TO WS-HOLD-SNA
+   146		      INITIALIZE WS-HOLD-TBL
+   147		  END-IF.
+   148
+   149            MOVE 'N' TO FIRST-REC-SW.
+   150
+   151	     * Store the quiz based on the Quiz Code (1-5)
+   152		  IF IN-QCODE >= 1 AND IN-QCODE <= 5
+   153		      MOVE IN-QUIZ TO WS-HOLD-QUIZ(IN-QCODE)
+   154		  END-IF.
+   155
+   156		  READ STUDENT-FILE
+   157                 AT END MOVE 'Y' TO EOF-SW.
+   158
+   159	      PRINT-ROUTINE.
+   160		  MOVE WS-HOLD-SNO TO P-SNO.
+   161		  MOVE WS-HOLD-SNA TO P-SNA.
+   162		  MOVE 0 TO WS-TOTAL.
+   163
+   164		  PERFORM VARYING SUB FROM 1 BY 1 UNTIL SUB > 5
+   165	     * Move quiz from holder table to output line
+   166		     MOVE WS-HOLD-QUIZ(SUB) TO PRT-QUIZ(SUB)
+   167		     ADD WS-HOLD-QUIZ(SUB) TO WS-TOTAL
+   168		  END-PERFORM.
+   169
+   170		  COMPUTE WS-AVG = WS-TOTAL / 5.
+   171		  MOVE WS-AVG TO P-AVE.
+   172
+   173		  WRITE PRINT-LINE FROM DETALYE AFTER ADVANCING 1 LINE.
+   174
+   175	     * Increment the total student counter
+   176		  ADD 1 TO WS-STUDENT-CTR.Realia COBOL Version 4.000   SN: 01-07732  C:QUIZ.COB					06DEC25 03:46:46  PAGE	  4
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        040E	 GRADES$C00
+			  D00	     06        04E3	 GRADES$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     176
+			Compilation time (mm:ss.hh):  0:02.37
+			Compilation speed (lines/minute):  4455
+
+			Compilation date (yy/mm/dd): 25/12/06
+			     Time of day (hh:mm:ss): 03:46:47
+
+			Source length in LST file:000006719

@@ -1,0 +1,218 @@
+     1	      IDENTIFICATION DIVISION.							06DEC25 23:52:35  PAGE	  1
+     2	      PROGRAM-ID. STUDENT-CENSUS.
+     3
+     4	      ENVIRONMENT DIVISION.
+     5	      INPUT-OUTPUT SECTION.
+     6	      FILE-CONTROL.
+     7            SELECT INFILE ASSIGN TO "BILANG.TXT"
+     8		      ORGANIZATION IS SEQUENTIAL.
+     9            SELECT OUTFILE ASSIGN TO "DAMI.TXT"
+    10		      ORGANIZATION IS SEQUENTIAL.
+    11
+    12	      DATA DIVISION.
+    13	      FILE SECTION.
+    14	      FD  INFILE
+    15		  LABEL RECORD IS STANDARD.
+    16	      01  DAGDAG.
+    17		  02 IN-YR     PIC 9.
+    18		  02 IN-CC     PIC X(5).
+    19		  02 IN-SNO    PIC X(10).
+    20		  02 IN-SNA    PIC X(25).
+    21
+    22	      FD  OUTFILE
+    23		  LABEL RECORD IS OMITTED.
+    24	      01  BAWAS       PIC X(80).
+    25
+    26	      WORKING-STORAGE SECTION.
+    27	      01  EOFSW       PIC 9 VALUE 0.
+    28	      01  SUB1	      PIC 9 VALUE 0.
+    29	      01  SUB2	      PIC 9 VALUE 0.
+    30	      01  COURSE-IDX  PIC 9 VALUE 0.
+    31
+    32	      01  MESA.
+    33		  02 TAON OCCURS 4 TIMES.
+    34		     03 KURSO OCCURS 2 TIMES.
+    35			04 COUNT-VAL PIC 9(4) VALUE 0.
+    36
+    37
+    38	      01  TS-YEAR.
+    39		  02 TOT-YR OCCURS 4 TIMES PIC 9(4) VALUE 0.
+    40
+    41	      01  TS-COUR.
+    42		  02 TOT-CR OCCURS 2 TIMES PIC 9(4) VALUE 0.
+    43
+    44	      01  YEAR-NAMES-TABLE.
+    45            02 FILLER PIC X(10) VALUE "Freshmen  ".
+    46            02 FILLER PIC X(10) VALUE "Sophomore ".
+    47            02 FILLER PIC X(10) VALUE "Junior    ".
+    48            02 FILLER PIC X(10) VALUE "Senior    ".
+    49	      01  YEAR-LABELS REDEFINES YEAR-NAMES-TABLE.
+    50		  02 Y-NAME PIC X(10) OCCURS 4 TIMES.
+    51
+    52	      01  HEADER-1.
+    53		  02 FILLER PIC X(20) VALUE SPACES.
+    54		  02 FILLER PIC X(45) VALUE
+    55               "Polytechnic University of the Philippines".
+    56		  02 FILLER PIC X(15) VALUE SPACES.
+    57
+    58	      01  HEADER-2.
+    59		  02 FILLER PIC X(30) VALUE SPACES.
+    60            02 FILLER PIC X(20) VALUE "Sta. Mesa, Manila".    61		  02 FILLER PIC X(30) VALUE SPACES.					06DEC25 23:52:35  PAGE	  2
+    62
+    63	      01  HEADER-3.
+    64		  02 FILLER PIC X(30) VALUE SPACES.
+    65            02 FILLER PIC X(20) VALUE "Student Population".
+    66		  02 FILLER PIC X(30) VALUE SPACES.
+    67
+    68	      01  COL-HEADER-1.
+    69            02 FILLER PIC X(12) VALUE "Year Level".
+    70		  02 FILLER PIC X(15) VALUE SPACES.
+    71            02 FILLER PIC X(10) VALUE "Course".
+    72		  02 FILLER PIC X(43) VALUE SPACES.
+    73
+    74	      01  COL-HEADER-2.
+    75		  02 FILLER PIC X(20) VALUE SPACES.
+    76            02 FILLER PIC X(10) VALUE "BSCS".
+    77            02 FILLER PIC X(10) VALUE "BSIT".
+    78            02 FILLER PIC X(10) VALUE "Total".
+    79		  02 FILLER PIC X(30) VALUE SPACES.
+    80
+    81	      01  DETALYE.
+    82		  02 P-YEAR-NAME PIC X(12).
+    83		  02 FILLER	 PIC X(8) VALUE SPACES.
+    84		  02 P-TAB	 PIC ZZZ9 OCCURS 2 TIMES.
+    85		  02 FILLER	 PIC X(5) VALUE SPACES.
+    86		  02 P-TOT-YEAR  PIC ZZZ9.
+    87		  02 FILLER	 PIC X(35) VALUE SPACES.
+    88
+    89	      01  TOTAL-LINE.
+    90            02 FILLER      PIC X(12) VALUE "Total".
+    91		  02 FILLER	 PIC X(8) VALUE SPACES.
+    92		  02 P-TOT-CO	 PIC Z,ZZ9 OCCURS 2 TIMES.
+    93		  02 FILLER	 PIC X(5) VALUE SPACES.
+    94		  02 P-GRAND-TOT PIC ZZ,ZZ9.
+    95
+    96	      01  GRAND-TOTAL	 PIC 9(5) VALUE 0.
+    97
+    98	      PROCEDURE DIVISION.
+    99	      MAIN-RTN.
+   100		  PERFORM INIT-RTN.
+   101		  PERFORM PROCESS-RTN UNTIL EOFSW = 1.
+   102		  PERFORM FINISH-RTN.
+   103		  STOP RUN.
+   104
+   105	      INIT-RTN.
+   106		  OPEN INPUT INFILE
+   107		       OUTPUT OUTFILE.
+   108		  READ INFILE AT END MOVE 1 TO EOFSW.
+   109		  PERFORM HEADING-RTN.
+   110
+   111	      HEADING-RTN.
+   112		  WRITE BAWAS FROM HEADER-1 AFTER ADVANCING 1 LINE.
+   113		  WRITE BAWAS FROM HEADER-2 AFTER ADVANCING 1 LINE.
+   114		  WRITE BAWAS FROM HEADER-3 AFTER ADVANCING 2 LINES.
+   115		  WRITE BAWAS FROM COL-HEADER-1 AFTER ADVANCING 2 LINES.
+   116		  WRITE BAWAS FROM COL-HEADER-2 AFTER ADVANCING 1 LINE.
+   117		  MOVE SPACES TO BAWAS.
+   118		  WRITE BAWAS AFTER ADVANCING 1 LINE.
+   119
+   120	      PROCESS-RTN.   121            IF IN-CC = "BSCS "                                                    06DEC25 23:52:35  PAGE    3
+   122		      MOVE 1 TO COURSE-IDX
+   123		  ELSE
+   124                IF IN-CC = "BSIT "
+   125			  MOVE 2 TO COURSE-IDX
+   126		      ELSE
+   127			  MOVE 2 TO COURSE-IDX
+   128		      END-IF
+   129		  END-IF.
+   130
+   131		  ADD 1 TO COUNT-VAL(IN-YR, COURSE-IDX).
+   132
+   133		  ADD 1 TO TOT-CR(COURSE-IDX).
+   134
+   135		  ADD 1 TO TOT-YR(IN-YR).
+   136
+   137		  READ INFILE AT END MOVE 1 TO EOFSW.
+   138
+   139	      FINISH-RTN.
+   140		  PERFORM MOVE1-RTN VARYING SUB1 FROM 1 BY 1
+   141			  UNTIL SUB1 > 4.
+   142
+   143		  PERFORM TOTAL-COUR-RTN.
+   144
+   145		  CLOSE INFILE, OUTFILE.
+   146
+   147	      MOVE1-RTN.
+   148		  MOVE Y-NAME(SUB1) TO P-YEAR-NAME.
+   149		  PERFORM MOVE2-RTN VARYING SUB2 FROM 1 BY 1
+   150			  UNTIL SUB2 > 2.
+   151
+   152		  MOVE TOT-YR(SUB1) TO P-TOT-YEAR.
+   153
+   154		  WRITE BAWAS FROM DETALYE AFTER ADVANCING 1 LINE.
+   155
+   156	      MOVE2-RTN.
+   157		  MOVE COUNT-VAL(SUB1, SUB2) TO P-TAB(SUB2).
+   158
+   159	      TOTAL-COUR-RTN.
+   160		  PERFORM VARYING SUB2 FROM 1 BY 1 UNTIL SUB2 > 2
+   161		      MOVE TOT-CR(SUB2) TO P-TOT-CO(SUB2)
+   162		      ADD TOT-CR(SUB2) TO GRAND-TOTAL
+   163		  END-PERFORM.
+   164
+   165		  MOVE GRAND-TOTAL TO P-GRAND-TOT.
+   166		  WRITE BAWAS FROM TOTAL-LINE AFTER ADVANCING 2 LINES.Realia COBOL Version 4.000   SN: 01-07732  C:STUDENT.COB				06DEC25 23:52:35  PAGE	  4
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        045E	 STUDENT$CENSUS$C00
+			  D00	     06        04D3	 STUDENT$CENSUS$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     166
+			Compilation time (mm:ss.hh):  0:01.75
+			Compilation speed (lines/minute):  5691
+
+			Compilation date (yy/mm/dd): 25/12/06
+			     Time of day (hh:mm:ss): 23:52:36
+
+			Source length in LST file:000005841
