@@ -1,0 +1,176 @@
+     1	      IDENTIFICATION DIVISION.							22DEC25 24:24:03  PAGE	  1
+     2	      PROGRAM-ID. STUDENT-REPORT.
+     3
+     4	      ENVIRONMENT DIVISION.
+     5	      INPUT-OUTPUT SECTION.
+     6	      FILE-CONTROL.
+     7            SELECT INFILE ASSIGN TO "BILANG.txt".
+     8            SELECT OUTFILE ASSIGN TO "DAMI.txt".
+     9
+    10	      DATA DIVISION.
+    11	      FILE SECTION.
+    12	      FD INFILE
+    13		  LABEL RECORD IS STANDARD.
+    14	      01 DAGDAG.
+    15		  02 YR   PIC 9.
+    16		  02 CC   PIC X(5).
+    17		  02 SNO  PIC X(10).
+    18		  02 SNA  PIC X(25).
+    19
+    20	      FD OUTFILE
+    21		  LABEL RECORD IS OMITTED.
+    22	      01 BAWAS	  PIC X(80).
+    23
+    24	      WORKING-STORAGE SECTION.
+    25	      01 EOFSW	  PIC 9 VALUE 0.
+    26	      01 SUB1	  PIC 9 VALUE 0.
+    27	      01 SUB2	  PIC 9 VALUE 0.
+    28
+    29	      01 MESA.
+    30		  02 TAON OCCURS 4 TIMES.
+    31		      03 KURS PIC 999 OCCURS 2 TIMES VALUE ZERO.
+    32
+    33	      01 TS-YEAR-TABLE.
+    34		  02 TOT-YR    PIC 9(4) OCCURS 4 TIMES VALUE ZERO.
+    35	      01 TS-COUR-TABLE.
+    36		  02 TOT-CR    PIC 9(4) OCCURS 2 TIMES VALUE ZERO.
+    37
+    38	      01 HDR-1.
+    39		  02 FILLER PIC X(30) VALUE SPACES.
+    40            02 FILLER PIC X(3) VALUE "PUP".
+    41		  02 FILLER PIC X(57) VALUE SPACES.
+    42	      01 HDR-2.
+    43		  02 FILLER PIC X(36) VALUE SPACES.
+    44            02 FILLER PIC X(20) VALUE "Sta. Mesa, Manila".
+    45	      01 HDR-3.
+    46		  02 FILLER PIC X(36) VALUE SPACES.
+    47            02 FILLER PIC X(20) VALUE "Student Population".
+    48	      01 HDR-4.
+    49            02 FILLER PIC X(30) VALUE "Year Level".
+    50            02 FILLER PIC X(15) VALUE "BSCS".
+    51            02 FILLER PIC X(15) VALUE "BSIT".
+    52            02 FILLER PIC X(10) VALUE "Total".
+    53
+    54	      01 DETALYE.
+    55		  02 P-YEAR    PIC X(15).
+    56		  02 FILLER    PIC X(15) VALUE SPACES.
+    57		  02 P-BSCS    PIC ZZ9.
+    58		  02 FILLER    PIC X(12) VALUE SPACES.
+    59		  02 P-BSIT    PIC ZZ9.
+    60		  02 FILLER    PIC X(10) VALUE SPACES.    61		  02 P-TOT-YR  PIC Z,ZZ9.						22DEC25 24:24:03  PAGE	  2
+    62
+    63	      01 TOTAL-LINE.
+    64            02 FILLER    PIC X(15) VALUE "Total".
+    65		  02 FILLER    PIC X(14) VALUE SPACES.
+    66		  02 P-TOT-CS  PIC Z,ZZ9.
+    67		  02 FILLER    PIC X(10) VALUE SPACES.
+    68		  02 P-TOT-IT  PIC Z,ZZ9.
+    69
+    70	      PROCEDURE DIVISION.
+    71	      MAIN-RTN.
+    72		  PERFORM INIT-RTN.
+    73		  PERFORM PROCESS-RTN UNTIL EOFSW = 1.
+    74		  PERFORM FINISH-RTN.
+    75		  STOP RUN.
+    76
+    77	      INIT-RTN.
+    78		  OPEN INPUT INFILE, OUTPUT OUTFILE.
+    79		  PERFORM HEADING-RTN.
+    80		  READ INFILE AT END MOVE 1 TO EOFSW.
+    81
+    82	      HEADING-RTN.
+    83		  WRITE BAWAS FROM HDR-1 AFTER ADVANCING 1 LINE.
+    84		  WRITE BAWAS FROM HDR-2 AFTER ADVANCING 1 LINE.
+    85		  MOVE SPACES TO BAWAS.
+    86		  WRITE BAWAS AFTER ADVANCING 2 LINES.
+    87		  WRITE BAWAS FROM HDR-3 AFTER ADVANCING 1 LINE.
+    88		  WRITE BAWAS AFTER ADVANCING 1 LINE.
+    89		  WRITE BAWAS FROM HDR-4 AFTER ADVANCING 1 LINE.
+    90
+    91	      PROCESS-RTN.
+    92            IF CC = "BSCS"
+    93		  MOVE 1 TO SUB2
+    94		  ELSE
+    95		  MOVE 2 TO SUB2.
+    96
+    97		  ADD 1 TO KURS(YR, SUB2).
+    98
+    99		  ADD 1 TO TOT-YR(YR).
+   100		  ADD 1 TO TOT-CR(SUB2).
+   101
+   102		  READ INFILE AT END MOVE 1 TO EOFSW.
+   103
+   104	      FINISH-RTN.
+   105		  PERFORM MOVE-AND-WRITE-RTN VARYING SUB1 FROM 1 BY 1
+   106		  UNTIL SUB1 > 4.
+   107
+   108		  MOVE TOT-CR(1) TO P-TOT-CS.
+   109		  MOVE TOT-CR(2) TO P-TOT-IT.
+   110		  WRITE BAWAS FROM TOTAL-LINE AFTER ADVANCING 2 LINES.
+   111		  CLOSE INFILE, OUTFILE.
+   112
+   113	      MOVE-AND-WRITE-RTN.
+   114		  EVALUATE SUB1
+   115            WHEN 1 MOVE "Freshmen" TO P-YEAR
+   116            WHEN 2 MOVE "Sophomore" TO P-YEAR
+   117            WHEN 3 MOVE "Junior"    TO P-YEAR
+   118            WHEN 4 MOVE "Senior"    TO P-YEAR
+   119		  END-EVALUATE.
+   120   121		  MOVE KURS(SUB1, 1) TO P-BSCS. 					22DEC25 24:24:03  PAGE	  3
+   122		  MOVE KURS(SUB1, 2) TO P-BSIT.
+   123		  MOVE TOT-YR(SUB1)  TO P-TOT-YR.
+   124		  WRITE BAWAS FROM DETALYE AFTER ADVANCING 1 LINE.Realia COBOL Version 4.000   SN: 01-07732  C:2DTABLE.COB				22DEC25 24:24:03  PAGE	  4
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        03F0	 STUDENT$REPORT$C00
+			  D00	     06        0430	 STUDENT$REPORT$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     124
+			Compilation time (mm:ss.hh):  0:01.86
+			Compilation speed (lines/minute):  4000
+
+			Compilation date (yy/mm/dd): 25/12/22
+			     Time of day (hh:mm:ss): 24:24:03
+
+			Source length in LST file:000004375
