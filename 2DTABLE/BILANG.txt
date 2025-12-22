@@ -1,7 +1,18 @@
-1BSCS 202300001 Lawrence Panes          
+1BSCS 202300001 Lawrence Panes 
+1BSCS 202300002 Brianne Faith         
 1BSIT 202300002 Kezia Lorein Villegas 
 1BSIT 202300002 Apphia Gemina
 1BSIT 202300002 Bea Ashanti Panes           
-2BSCS 202200045 Paul Francis Correo               
-3BSIT 202100089 Harold Benedict Hernandez        
+2BSCS 202200045 Paul Francis Correo 
+2BSCS 202200045 Paul Francis
+2BSCS 202200045 Paul 
+2BSIT 202200045 Pau 
+2BSIT 202200045 Francis Correo
+2BSIT 202200045 Francis 
+3BSIT 202100089 Harold Benedict Hernandez 
+3BSIT 202100089 Harold Benedict
+3BSIT 202100089 Harold 
+3BSCS 202100089 Hyacinth Vannes Ramos   
+3BSCS 202100089 Hyacinth Vannes 
+3BSCS 202100089 Hyacinth    
 4BSCS 202000123 Craig Silverio 
