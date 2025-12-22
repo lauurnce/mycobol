@@ -4,8 +4,8 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-       SELECT INFILE ASSIGN TO "BILANG.DAT".
-       SELECT OUTFILE ASSIGN TO "DAMI.OUT".
+       SELECT INFILE ASSIGN TO "BILANG".
+       SELECT OUTFILE ASSIGN TO "DAMI".
 
        DATA DIVISION.
        FILE SECTION.
@@ -37,11 +37,12 @@
 
        01 HDR-1.
            02 FILLER PIC X(30) VALUE SPACES.
-           02 FILLER PIC X(40) VALUE "Polytechnic University of the Philippines".
+           02 FILLER PIC X(40) VALUE
+            "Polytechnic University of the Philippines".
        01 HDR-2.
            02 FILLER PIC X(36) VALUE SPACES.
            02 FILLER PIC X(20) VALUE "Sta. Mesa, Manila".
-       01 HDR-3.
+       01 HDR-3. 
            02 FILLER PIC X(36) VALUE SPACES.
            02 FILLER PIC X(20) VALUE "Student Population".
        01 HDR-4.
@@ -101,7 +102,8 @@
            READ INFILE AT END MOVE 1 TO EOFSW.
 
        FINISH-RTN.
-           PERFORM MOVE-AND-WRITE-RTN VARYING SUB1 FROM 1 BY 1 UNTIL SUB1 > 4.
+           PERFORM MOVE-AND-WRITE-RTN VARYING SUB1 FROM 1 BY 1 
+           UNTIL SUB1 > 4.
    
            MOVE TOT-CR(1) TO P-TOT-CS.
            MOVE TOT-CR(2) TO P-TOT-IT.
