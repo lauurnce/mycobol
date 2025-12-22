@@ -6,9 +6,9 @@
 				    Student Population
 				    Student Population
 Year Level		      BSCS	     BSIT	    Total
-Freshmen			1	       1	      2
-Sophomore			1	       0	      1
-Junior				0	       1	      1
+Freshmen			2	       3	      5
+Sophomore			3	       3	      6
+Junior				3	       3	      6
 Senior				1	       0	      1
 
-Total				 3		2
+Total				 9		9
