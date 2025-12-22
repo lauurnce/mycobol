@@ -4,13 +4,13 @@
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
-       SELECT INFILE ASSIGN TO "BILANG.txt".
-       SELECT OUTFILE ASSIGN TO "DAMI.txt".
+           SELECT INFILE ASSIGN TO "BILANG.txt".
+           SELECT OUTFILE ASSIGN TO "DAMI.txt".
 
        DATA DIVISION.
        FILE SECTION.
        FD INFILE
-       LABEL RECORD IS STANDARD.
+           LABEL RECORD IS STANDARD.
        01 DAGDAG.
            02 YR   PIC 9.
            02 CC   PIC X(5).
@@ -18,7 +18,7 @@
            02 SNA  PIC X(25).
 
        FD OUTFILE
-       LABEL RECORD IS OMITTED.
+           LABEL RECORD IS OMITTED.
        01 BAWAS    PIC X(80).
 
        WORKING-STORAGE SECTION.
@@ -37,8 +37,8 @@
 
        01 HDR-1.
            02 FILLER PIC X(30) VALUE SPACES.
-           02 FILLER PIC X(40) VALUE
-            "Polytechnic University of the Philippines".
+           02 FILLER PIC X(3) VALUE "PUP".
+           02 FILLER PIC X(57) VALUE SPACES.
        01 HDR-2.
            02 FILLER PIC X(36) VALUE SPACES.
            02 FILLER PIC X(20) VALUE "Sta. Mesa, Manila".
