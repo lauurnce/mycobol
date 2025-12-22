@@ -1,0 +1,14 @@
+
+			      PUP
+				    Sta. Mesa, Manila
+
+
+				    Student Population
+				    Student Population
+Year Level		      BSCS	     BSIT	    Total
+Freshmen			1	       1	      2
+Sophomore			1	       0	      1
+Junior				0	       1	      1
+Senior				1	       0	      1
+
+Total				 3		2
