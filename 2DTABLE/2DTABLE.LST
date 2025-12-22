@@ -1,4 +1,4 @@
-     1	      IDENTIFICATION DIVISION.							22DEC25 24:24:03  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							22DEC25 24:31:41  PAGE	  1
      2	      PROGRAM-ID. STUDENT-REPORT.
      3
      4	      ENVIRONMENT DIVISION.
@@ -57,7 +57,7 @@
     57		  02 P-BSCS    PIC ZZ9.
     58		  02 FILLER    PIC X(12) VALUE SPACES.
     59		  02 P-BSIT    PIC ZZ9.
-    60		  02 FILLER    PIC X(10) VALUE SPACES.    61		  02 P-TOT-YR  PIC Z,ZZ9.						22DEC25 24:24:03  PAGE	  2
+    60		  02 FILLER    PIC X(10) VALUE SPACES.    61		  02 P-TOT-YR  PIC Z,ZZ9.						22DEC25 24:31:41  PAGE	  2
     62
     63	      01 TOTAL-LINE.
     64            02 FILLER    PIC X(15) VALUE "Total".
@@ -116,10 +116,10 @@
    117            WHEN 3 MOVE "Junior"    TO P-YEAR
    118            WHEN 4 MOVE "Senior"    TO P-YEAR
    119		  END-EVALUATE.
-   120   121		  MOVE KURS(SUB1, 1) TO P-BSCS. 					22DEC25 24:24:03  PAGE	  3
+   120   121		  MOVE KURS(SUB1, 1) TO P-BSCS. 					22DEC25 24:31:41  PAGE	  3
    122		  MOVE KURS(SUB1, 2) TO P-BSIT.
    123		  MOVE TOT-YR(SUB1)  TO P-TOT-YR.
-   124		  WRITE BAWAS FROM DETALYE AFTER ADVANCING 1 LINE.Realia COBOL Version 4.000   SN: 01-07732  C:2DTABLE.COB				22DEC25 24:24:03  PAGE	  4
+   124		  WRITE BAWAS FROM DETALYE AFTER ADVANCING 1 LINE.Realia COBOL Version 4.000   SN: 01-07732  C:2DTABLE.COB				22DEC25 24:31:41  PAGE	  4
 
 
 
@@ -167,10 +167,10 @@
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     124
-			Compilation time (mm:ss.hh):  0:01.86
-			Compilation speed (lines/minute):  4000
+			Compilation time (mm:ss.hh):  0:01.81
+			Compilation speed (lines/minute):  4110
 
 			Compilation date (yy/mm/dd): 25/12/22
-			     Time of day (hh:mm:ss): 24:24:03
+			     Time of day (hh:mm:ss): 24:31:41
 
 			Source length in LST file:000004375
