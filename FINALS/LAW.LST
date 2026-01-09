@@ -1,0 +1,114 @@
+     1	      IDENTIFICATION DIVISION.							09JAN26 15:51:29  PAGE	  1
+     2	      PROGRAM-ID. KEZIA.
+     3
+     4	      ENVIRONMENT DIVISION.
+     5	      CONFIGURATION SECTION.
+     6	      SOURCE-COMPUTER. IBM-PC.
+     7	      OBJECT-COMPUTER. IBM-PC.
+     8
+     9	      DATA DIVISION.
+    10	      WORKING-STORAGE SECTION.
+    11	      01  SNO PIC 9(5) VALUE ZERO.
+    12	      01  SNA PIC X(25) VALUE ZERO.
+    13	      01  CRS PIC 9 VALUE ZERO.
+    14	      01  YS PIC X(5) VALUE ZERO.
+    15	      01  ST PIC 9 VALUE ZERO.
+    16	      01  MG PIC 9V99 VALUE ZERO.
+    17	      01  FG PIC 9V99 VALUE ZERO.
+    18	      01  AVG PIC 9V99 VALUE ZERO.
+    19	      01  REM PIC X(6) VALUE SPACES.
+    20	      01  VAL PIC X VALUE ZERO.
+    21
+    22	      SCREEN SECTION.
+    23	      01  SCRE.
+    24		  02 BLANK SCREEN.
+    25
+    26	      PROCEDURE DIVISION.
+    27	      MAIN-RTN.
+    28		  PERFORM PROCESS-RTN THRU PROCESS-END
+    29                UNTIL VAL = 'N' OR VAL = 'n'.
+    30		  STOP RUN.
+    31
+    32	      PROCESS-RTN.
+    33		  DISPLAY SCRE.
+    34            DISPLAY 'PUP' LINE 1 COLUMN 20 .
+    35            DISPLAY 'CCIS' LINE 2 COLUMN 19.
+    36            DISPLAY 'Student Number: ' LINE 5 COLUMN 1.
+    37		  ACCEPT SNO LINE 5 COLUMN 20.
+    38            DISPLAY 'Student Name: ' LINE 6 COLUMN 1.
+    39		  ACCEPT SNA LINE 6 COLUMN 20.
+    40            DISPLAY 'Course: ' LINE 7 COLUMN 1.
+    41		  ACCEPT CRS LINE 7 COLUMN 20.
+    42            DISPLAY 'Year & Section: ' LINE 8 COLUMN 1.
+    43		  ACCEPT YS LINE 8 COLUMN 20.
+    44            DISPLAY 'Student Type: ' LINE 9 COLUMN 1.
+    45		  ACCEPT ST LINE 9 COLUMN 20.
+    46            DISPLAY 'Midterm Grade: ' LINE 10 COLUMN 1.
+    47		  ACCEPT MG LINE 10 COLUMN 20.
+    48            DISPLAY 'Final Grade: ' LINE 11 COLUMN 1.
+    49		  ACCEPT FG LINE 11 COLUMN 20.
+    50            DISPLAY 'Average Grade: ' LINE 12 COLUMN 1.
+    51		  COMPUTE AVG = (MG + FG) / 2.
+    52		  DISPLAY AVG LINE 12 COLUMN 20.
+    53            DISPLAY 'Remarks: ' LINE 13 COLUMN 1.
+    54		  IF AVG < 3.01
+    55                MOVE "PASSED" TO REM
+    56		  ELSE
+    57                MOVE "FAILED" TO REM.
+    58		  DISPLAY REM LINE 13 COLUMN 20.
+    59            DISPLAY "Enter Another Record? (Y/N)" LINE 15 COLUMN 1
+    60		  ACCEPT VAL.    61	      PROCESS-END.								09JAN26 15:51:29  PAGE	  2Realia COBOL Version 4.000   SN: 01-07732  C:LAW.COB					09JAN26 15:51:29  PAGE	  3
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        06EC	 KEZIA$C00
+			  D00	     06        01FF	 KEZIA$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	      61
+			Compilation time (mm:ss.hh):  0:02.08
+			Compilation speed (lines/minute):  1759
+
+			Compilation date (yy/mm/dd): 26/01/09
+			     Time of day (hh:mm:ss): 15:51:29
+
+			Source length in LST file:000002440

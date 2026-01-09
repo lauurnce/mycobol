@@ -1,0 +1,203 @@
+     1	      IDENTIFICATION DIVISION.							09JAN26 16:45:50  PAGE	  1
+     2	      PROGRAM-ID. KEZIA-REV.
+     3
+     4	      ENVIRONMENT DIVISION.
+     5	      CONFIGURATION SECTION.
+     6	      SOURCE-COMPUTER. IBM-PC.
+     7	      OBJECT-COMPUTER. IBM-PC.
+     8
+     9	      INPUT-OUTPUT SECTION.
+    10	      FILE-CONTROL.
+    11            SELECT STUDENT-FILE ASSIGN TO "STUDENT.TXT"
+    12		  ORGANIZATION IS SEQUENTIAL.
+    13
+    14	      DATA DIVISION.
+    15	      FILE SECTION.
+    16	      FD  STUDENT-FILE.
+    17	      01  STUDENT-REC.
+    18		  05 R-SNO	 PIC 9(5).
+    19		  05 R-SNA	 PIC X(25).
+    20		  05 R-CRS-DESC  PIC X(4).
+    21		  05 R-YS	 PIC X(5).
+    22		  05 R-ST-DESC	 PIC X(9).
+    23		  05 R-MG	 PIC 9V99.
+    24		  05 R-FG	 PIC 9V99.
+    25		  05 R-AVG	 PIC 9V99.
+    26		  05 R-REM	 PIC X(6).
+    27
+    28	      WORKING-STORAGE SECTION.
+    29	      01  SNO		 PIC 9(5) VALUE ZERO.
+    30	      01  SNA		 PIC X(25) VALUE SPACES.
+    31	      01  YS		 PIC X(5) VALUE SPACES.
+    32	      01  MG		 PIC 9V99 VALUE ZERO.
+    33	      01  FG		 PIC 9V99 VALUE ZERO.
+    34
+    35	      01  RAW-CRS	 PIC 9 VALUE ZERO.
+    36	      01  RAW-ST	 PIC 9 VALUE ZERO.
+    37        01  VALID-FLAG     PIC X VALUE 'N'.
+    38
+    39	      01  D-CRS 	 PIC X(4) VALUE SPACES.
+    40	      01  D-ST		 PIC X(9) VALUE SPACES.
+    41	      01  AVG		 PIC 9V99 VALUE ZERO.
+    42	      01  DISP-AVG	 PIC Z9.99.
+    43	      01  REM		 PIC X(6) VALUE SPACES.
+    44
+    45        01  VAL            PIC X VALUE 'Y'.
+    46
+    47	      SCREEN SECTION.
+    48	      01  CLS.
+    49		  02 BLANK SCREEN.
+    50
+    51	      PROCEDURE DIVISION.
+    52	      MAIN-RTN.
+    53		  OPEN EXTEND STUDENT-FILE.
+    54
+    55            PERFORM PROCESS-RTN UNTIL VAL = 'N' OR VAL = 'n'.
+    56
+    57		  CLOSE STUDENT-FILE.
+    58		  STOP RUN.
+    59
+    60	      PROCESS-RTN.    61		  DISPLAY CLS.								09JAN26 16:45:50  PAGE	  2
+    62            DISPLAY 'PUP - CCIS ENROLLMENT SYSTEM' LINE 2 COLUMN 25.
+    63            DISPLAY '----------------------------' LINE 3 COLUMN 25.
+    64
+    65
+    66            DISPLAY 'Student Number : ' LINE 5 COLUMN 5.
+    67		  ACCEPT SNO LINE 5 COLUMN 25.
+    68
+    69            DISPLAY 'Student Name   : ' LINE 6 COLUMN 5.
+    70		  ACCEPT SNA LINE 6 COLUMN 25.
+    71
+    72            MOVE 'N' TO VALID-FLAG.
+    73            PERFORM UNTIL VALID-FLAG = 'Y'
+    74                DISPLAY 'Course [1-BSIT, 2-BSCS]: ' LINE 7 COLUMN 5
+    75		      ACCEPT RAW-CRS LINE 7 COLUMN 30
+    76
+    77		      IF RAW-CRS = 1
+    78                    MOVE "BSIT" TO D-CRS
+    79                    MOVE 'Y' TO VALID-FLAG
+    80		      ELSE IF RAW-CRS = 2
+    81                    MOVE "BSCS" TO D-CRS
+    82                    MOVE 'Y' TO VALID-FLAG
+    83		      ELSE
+    84                    DISPLAY 'INVALID! ENTER 1 OR 2   ' LINE 7 COLUMN 40
+    85		      END-IF
+    86		  END-PERFORM.
+    87
+    88            DISPLAY '                        ' LINE 7 COLUMN 40.
+    89
+    90            DISPLAY 'Year & Section : ' LINE 8 COLUMN 5.
+    91		  ACCEPT YS LINE 8 COLUMN 25.
+    92
+    93            MOVE 'N' TO VALID-FLAG.
+    94            PERFORM UNTIL VALID-FLAG = 'Y'
+    95                DISPLAY 'Type [1-Reg, 2-Irreg]  : ' LINE 9 COLUMN 5
+    96		      ACCEPT RAW-ST LINE 9 COLUMN 30
+    97
+    98		      IF RAW-ST = 1
+    99                    MOVE "REGULAR  " TO D-ST
+   100                    MOVE 'Y' TO VALID-FLAG
+   101		      ELSE IF RAW-ST = 2
+   102                    MOVE "IRREGULAR" TO D-ST
+   103                    MOVE 'Y' TO VALID-FLAG
+   104		      ELSE
+   105                    DISPLAY 'INVALID! ENTER 1 OR 2   ' LINE 9 COLUMN 40
+   106		      END-IF
+   107		  END-PERFORM.
+   108
+   109            DISPLAY '                        ' LINE 9 COLUMN 40.
+   110
+   111            DISPLAY 'Midterm Grade  : ' LINE 10 COLUMN 5.
+   112		  ACCEPT MG LINE 10 COLUMN 25.
+   113
+   114            DISPLAY 'Final Grade    : ' LINE 11 COLUMN 5.
+   115		  ACCEPT FG LINE 11 COLUMN 25.
+   116
+   117		  COMPUTE AVG = (MG + FG) / 2.
+   118		  MOVE AVG TO DISP-AVG.
+   119
+   120		  IF AVG < 3.01 OR AVG = 3.00   121                MOVE "PASSED" TO REM                                              09JAN26 16:45:50  PAGE    3
+   122		  ELSE
+   123                MOVE "FAILED" TO REM.
+   124
+   125            DISPLAY '----------------------------' LINE 13 COLUMN 25.
+   126            DISPLAY 'SUMMARY REPORT'             LINE 14 COLUMN 28.
+   127            DISPLAY 'Course: ' LINE 15 COLUMN 5.
+   128		  DISPLAY D-CRS LINE 15 COLUMN 15.
+   129            DISPLAY 'Type  : ' LINE 16 COLUMN 5.
+   130		  DISPLAY D-ST LINE 16 COLUMN 15.
+   131            DISPLAY 'Ave   : ' LINE 17 COLUMN 5.
+   132		  DISPLAY DISP-AVG LINE 17 COLUMN 15.
+   133            DISPLAY 'Remark: ' LINE 18 COLUMN 5.
+   134		  DISPLAY REM LINE 18 COLUMN 15.
+   135            DISPLAY '----------------------------' LINE 19 COLUMN 25.
+   136            DISPLAY 'RECORD SAVED TO DISK.' LINE 20 COLUMN 25.
+   137
+   138		  MOVE SNO TO R-SNO.
+   139		  MOVE SNA TO R-SNA.
+   140		  MOVE D-CRS TO R-CRS-DESC.
+   141		  MOVE YS TO R-YS.
+   142		  MOVE D-ST TO R-ST-DESC.
+   143		  MOVE MG TO R-MG.
+   144		  MOVE FG TO R-FG.
+   145		  MOVE AVG TO R-AVG.
+   146		  MOVE REM TO R-REM.
+   147		  WRITE STUDENT-REC.
+   148
+   149            DISPLAY "Enter Another Record? (Y/N): " LINE 22 COLUMN 5.
+   150		  ACCEPT VAL LINE 22 COLUMN 35.
+   151	      PROCESS-END.Realia COBOL Version 4.000   SN: 01-07732  C:LAWR.COB					09JAN26 16:45:50  PAGE	  4
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        0B92	 KEZIA$REV$C00
+			  D00	     06        03BA	 KEZIA$REV$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     151
+			Compilation time (mm:ss.hh):  0:02.25
+			Compilation speed (lines/minute):  4026
+
+			Compilation date (yy/mm/dd): 26/01/09
+			     Time of day (hh:mm:ss): 16:45:51
+
+			Source length in LST file:000005636
