@@ -1,0 +1,198 @@
+     1	      IDENTIFICATION DIVISION.							20JAN26 00:48:20  PAGE	  1
+     2	      PROGRAM-ID. STU.
+     3	     *AUTHOR. LAWRENCE .
+     4	     *INSTALLATION. BAHAY.
+     5	     *DATE-WRITTEN. JANUARY 9, 2026.
+     6	     *DATE-COMPILED. JANUARY 9, 2026.
+     7	     *SECURITY. EXCLUSIVE FOR BSIT 2-4.
+     8	     *REMARKS. ENHANCED PROGRAM.
+     9
+    10	      ENVIRONMENT DIVISION.
+    11	      CONFIGURATION SECTION.
+    12	      SOURCE-COMPUTER. IBM-PC.
+    13	      OBJECT-COMPUTER. IBM-PC.
+    14	      INPUT-OUTPUT SECTION.
+    15	      FILE-CONTROL.
+    16            SELECT OUTFILE ASSIGN TO 'STUDSOUT'.
+    17
+    18	      DATA DIVISION.
+    19	      FILE SECTION.
+    20	      FD  OUTFILE
+    21		  LABEL RECORD IS STANDARD
+    22		  DATA RECORD IS OUTREC.
+    23	      01  OUTREC.
+    24		  02 D-SNO PIC 9(5).
+    25		  02 D-SNA PIC X(25).
+    26		  02 D-CRS PIC 9.
+    27		  02 D-YRSEC PIC X(5).
+    28		  02 D-STYPE PIC 9.
+    29		  02 D-MIDG PIC 9V99.
+    30		  02 D-FING PIC 9V99.
+    31		  02 D-AVE PIC 9V99.
+    32		  02 D-REM PIC X(6).
+    33
+    34	      WORKING-STORAGE SECTION.
+    35	      01  SNO PIC 9(5) VALUE ZERO.
+    36	      01  SNA PIC X(25) VALUE ZERO.
+    37	      01  CRS PIC 9 VALUE ZERO.
+    38	      01  YRSEC PIC X(5) VALUE ZERO.
+    39	      01  STYPE PIC 9 VALUE ZERO.
+    40	      01  MIDG PIC 9V99 VALUE ZERO.
+    41	      01  FING PIC 9V99 VALUE ZERO.
+    42	      01  AVE PIC 9V99 VALUE ZERO.
+    43	      01  REM PIC X(6) VALUE SPACES.
+    44        01  VALID PIC X VALUE 'N'.
+    45        01  ANS PIC X VALUE 'Y'.
+    46	      01  DISP-AVE PIC 9.999 VALUE ZERO.
+    47
+    48	      SCREEN SECTION.
+    49	      01  SCRE.
+    50		  02 BLANK SCREEN.
+    51
+    52	      PROCEDURE DIVISION.
+    53	      MAIN-RTN.
+    54		  OPEN OUTPUT OUTFILE.
+    55		  PERFORM PROCESS-RTN THRU PROCESS-END
+    56                UNTIL ANS = 'N' OR ANS = 'n'.
+    57		  CLOSE OUTFILE.
+    58		  STOP RUN.
+    59
+    60	      PROCESS-RTN.    61		  DISPLAY SCRE. 							20JAN26 00:48:20  PAGE	  2
+    62            DISPLAY 'PUP' LINE 1 COLUMN 38.
+    63            DISPLAY 'CCIS' LINE 2 COLUMN 38.
+    64
+    65            DISPLAY 'Student Number: ' LINE 5 COLUMN 1.
+    66		  ACCEPT SNO LINE 5 COLUMN 40.
+    67
+    68            DISPLAY 'Student Name: ' LINE 6 COLUMN 1.
+    69		  ACCEPT SNA LINE 6 COLUMN 40.
+    70
+    71            DISPLAY 'Course: ' LINE 7 COLUMN 1.
+    72            MOVE 'N' TO VALID.
+    73            PERFORM UNTIL VALID = 'Y'
+    74		      ACCEPT CRS LINE 7 COLUMN 40
+    75		      IF CRS = 1 OR CRS = 2
+    76                    MOVE 'Y' TO VALID
+    77                    DISPLAY '                         ' LINE 23 COLUMN 1
+    78		      ELSE
+    79                    DISPLAY 'Invalid Course (1-2 Only)' LINE 23 COLUMN 1
+    80		      END-IF
+    81		  END-PERFORM.
+    82
+    83            DISPLAY 'Year & Section: ' LINE 8 COLUMN 1.
+    84		  ACCEPT YRSEC LINE 8 COLUMN 40.
+    85
+    86            DISPLAY 'Student Type: ' LINE 9 COLUMN 1.
+    87            MOVE 'N' TO VALID.
+    88            PERFORM UNTIL VALID = 'Y'
+    89		      ACCEPT STYPE LINE 9 COLUMN 40
+    90		      IF STYPE = 1 OR STYPE = 2
+    91                    MOVE 'Y' TO VALID
+    92                    DISPLAY '                       ' LINE 23 COLUMN 1
+    93		      ELSE
+    94                    DISPLAY 'Invalid Type (1-2 Only)' LINE 23 COLUMN 1
+    95		      END-IF
+    96		  END-PERFORM.
+    97
+    98            DISPLAY 'Midterm Grade: ' LINE 10 COLUMN 1.
+    99            MOVE 'N' TO VALID.
+   100            PERFORM UNTIL VALID = 'Y'
+   101		      ACCEPT MIDG LINE 10 COLUMN 40
+   102		      IF MIDG GREATER THAN 0.99 AND LESS THAN 5.01
+   103                    MOVE 'Y' TO VALID
+   104                    DISPLAY '                         ' LINE 23 COLUMN 1
+   105		      ELSE
+   106                    DISPLAY 'Invalid Grade (1.00-5.00)' LINE 23 COLUMN 1
+   107		      END-IF
+   108		  END-PERFORM.
+   109
+   110            DISPLAY 'Final Grade: ' LINE 11 COLUMN 1.
+   111            MOVE 'N' TO VALID.
+   112            PERFORM UNTIL VALID = 'Y'
+   113		      ACCEPT FING LINE 11 COLUMN 40
+   114		      IF FING GREATER THAN 0.99 AND LESS THAN 5.01
+   115                    MOVE 'Y' TO VALID
+   116                    DISPLAY '                       ' LINE 23 COLUMN 1
+   117		      ELSE
+   118                    DISPLAY 'Invalid Grade (1.00-5.00)' LINE 23 COLUMN 1
+   119		      END-IF
+   120		  END-PERFORM.   121											20JAN26 00:48:20  PAGE	  3
+   122            DISPLAY 'Average: ' LINE 12 COLUMN 1.
+   123		  COMPUTE AVE = (MIDG + FING) / 2
+   124		  MOVE AVE TO DISP-AVE.
+   125		  DISPLAY DISP-AVE LINE 12 COLUMN 40.
+   126
+   127            DISPLAY 'Remarks: ' LINE 13 COLUMN 1.
+   128		  IF AVE LESS THAN 3.01
+   129                DISPLAY "PASSED" LINE 13 COLUMN 40
+   130		  ELSE
+   131                DISPLAY "FAILED" LINE 13 COLUMN 40.
+   132
+   133		  MOVE SNO TO D-SNO.
+   134		  MOVE SNA TO D-SNA.
+   135		  MOVE CRS TO D-CRS.
+   136		  MOVE YRSEC TO D-YRSEC.
+   137		  MOVE STYPE TO D-STYPE.
+   138		  MOVE MIDG TO D-MIDG.
+   139		  MOVE FING TO D-FING.
+   140		  MOVE AVE TO D-AVE.
+   141		  MOVE REM TO D-REM.
+   142
+   143            DISPLAY "Enter Another Record? (Y/N)" LINE 15 COLUMN 1
+   144		  ACCEPT ANS.
+   145		  WRITE OUTREC.
+   146	      PROCESS-END.Realia COBOL Version 4.000   SN: 01-07732  C:ENH.COB					20JAN26 00:48:20  PAGE	  4
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        0A8E	 STU$C00
+			  D00	     06        0331	 STU$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     146
+			Compilation time (mm:ss.hh):  0:02.08
+			Compilation speed (lines/minute):  4211
+
+			Compilation date (yy/mm/dd): 26/01/20
+			     Time of day (hh:mm:ss): 00:48:21
+
+			Source length in LST file:000005484

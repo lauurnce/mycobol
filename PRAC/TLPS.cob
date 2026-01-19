@@ -1,6 +1,6 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. TLPS.
-      *AUTHOR. HAROLD.
+      *AUTHOR. LAWRENCE.
       *INSTALLATION. HOME.
       *DATE-WRITTEN. JANUARY 19.
       *SECURITY. EXCLUSIVE FOR BSIT 2-4.
@@ -143,7 +143,7 @@
                    MOVE "8:00 - 10:00 pm" TO AIRT
            END-EVALUATE.
 
-           DISPLAY (11, 1) "Airtime: ".
+           DISPLAY (11, 1) "Airtime: ".  
            DISPLAY (11, 45) AIRT.
 
            DISPLAY (12, 1) "Number of Televiewers: ".

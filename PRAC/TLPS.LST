@@ -1,8 +1,8 @@
-     1	      IDENTIFICATION DIVISION.							19JAN26 23:16:50  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							20JAN26 00:22:55  PAGE	  1
      2	      PROGRAM-ID. TLPS.
      3	     *AUTHOR. HAROLD.
      4	     *INSTALLATION. HOME.
-     5	     *DATE-WRITTEN. JANUARY.
+     5	     *DATE-WRITTEN. JANUARY 19.
      6	     *SECURITY. EXCLUSIVE FOR BSIT 2-4.
      7	     *REMARKS. PRACTICE PROGRAM.
      8
@@ -12,7 +12,7 @@
     12	      OBJECT-COMPUTER. IBM-PC.
     13	      INPUT-OUTPUT SECTION.
     14	      FILE-CONTROL.
-    15            SELECT OUTFILE ASSIGN TO "BENEDICT".
+    15            SELECT OUTFILE ASSIGN TO "LAWR".
     16
     17	      DATA DIVISION.
     18	      FILE SECTION.
@@ -57,7 +57,7 @@
     57	      MAIN-RTN.
     58		  OPEN OUTPUT OUTFILE.
     59		  PERFORM PROCESS-RTN THRU PROCESS-END
-    60                UNTIL ANS = 'N' OR ANS = 'n'    61		  PERFORM SUMMARY-RTN.							19JAN26 23:16:50  PAGE	  2
+    60                UNTIL ANS = 'N' OR ANS = 'n'    61		  PERFORM SUMMARY-RTN.							20JAN26 00:22:55  PAGE	  2
     62		  CLOSE OUTFILE.
     63		  STOP RUN.
     64
@@ -116,7 +116,7 @@
    117                WHEN 8 MOVE "AUGUST" TO MN
    118                WHEN 9 MOVE "SEPTEMBER" TO MN
    119                WHEN 10 MOVE "OCTOBER" TO MN
-   120                WHEN 11 MOVE "NOVEMBER" TO MN   121                WHEN 12 MOVE "DECEMBER" TO MN                                     19JAN26 23:16:50  PAGE    3
+   120                WHEN 11 MOVE "NOVEMBER" TO MN   121                WHEN 12 MOVE "DECEMBER" TO MN                                     20JAN26 00:22:55  PAGE    3
    122		  END-EVALUATE.
    123
    124            DISPLAY (9, 1) "Month Name: ".
@@ -175,19 +175,19 @@
    177            DISPLAY (16, 1) "Most Watched Television Show: ".
    178		  DISPLAY (16, 45) MWTVS.
    179
-   180            DISPLAY (17, 1) "Total No. of Televiewers: ".   181		  DISPLAY (17, 45) MAXTV.						19JAN26 23:16:50  PAGE	  4
+   180            DISPLAY (17, 1) "Total No. of Televiewers: ".   181		  DISPLAY (17, 45) MAXTV.						20JAN26 00:22:55  PAGE	  4
    182
    183            DISPLAY (18, 1) "Airtime: ".
    184		  DISPLAY (18, 45) MWAIRT.
    185
    186            DISPLAY (22, 20) 'Press Enter to Exit'.
-   187		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:TLPS.COB					19JAN26 23:16:50  PAGE	  5
+   187		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:TLPS.COB					20JAN26 00:22:55  PAGE	  5
 
 LINE ERR# LVL			 ERROR TEXT
 
  171 0621 W Digits may be truncated during MOVE from 'STORED-TOTALS'
 
-tlps	 has   1 Warning  messageRealia COBOL Version 4.000   SN: 01-07732  C:TLPS.COB					19JAN26 23:16:50  PAGE	  6
+tlps	 has   1 Warning  messageRealia COBOL Version 4.000   SN: 01-07732  C:TLPS.COB					20JAN26 00:22:55  PAGE	  6
 
 
 
@@ -195,7 +195,7 @@ tlps	 has   1 Warning  messageRealia COBOL Version 4.000   SN: 01-07732  C:TLP
 			Segment    Number     Length	    Name
 
 			  C00	     05        0D0C	 TLPS$C00
-			  D00	     06        0519	 TLPS$D00
+			  D00	     06        0515	 TLPS$D00
 
 
 			Realia COBOL Compiler Version Information
@@ -235,10 +235,10 @@ tlps	 has   1 Warning  messageRealia COBOL Version 4.000   SN: 01-07732  C:TLP
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     187
-			Compilation time (mm:ss.hh):  0:03.19
-			Compilation speed (lines/minute):  3517
+			Compilation time (mm:ss.hh):  0:02.14
+			Compilation speed (lines/minute):  5242
 
-			Compilation date (yy/mm/dd): 26/01/19
-			     Time of day (hh:mm:ss): 23:16:51
+			Compilation date (yy/mm/dd): 26/01/20
+			     Time of day (hh:mm:ss): 00:22:56
 
-			Source length in LST file:000006639
+			Source length in LST file:000006638
