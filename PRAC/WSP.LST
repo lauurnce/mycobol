@@ -1,0 +1,280 @@
+     1	      IDENTIFICATION DIVISION.							19JAN26 23:21:12  PAGE	  1
+     2	      PROGRAM-ID. WSP.
+     3	     *AUTHOR. HAROLD.
+     4	     *INSTALLATION. HOME.
+     5	     *DATE-WRITTEN. JANUARY.
+     6	     *SECURITY. EXCLUSIVE FOR BSIT 2-4.
+     7	     *REMARKS. PRACTICE PROGRAM.
+     8
+     9	      ENVIRONMENT DIVISION.
+    10	      CONFIGURATION SECTION.
+    11	      SOURCE-COMPUTER. IBM-PC.
+    12	      OBJECT-COMPUTER. IBM-PC.
+    13	      INPUT-OUTPUT SECTION.
+    14	      FILE-CONTROL.
+    15            SELECT OUTFILE ASSIGN TO "HAROLDBE".
+    16
+    17	      DATA DIVISION.
+    18	      FILE SECTION.
+    19	      FD  OUTFILE
+    20		  LABEL RECORD IS STANDARD
+    21		  DATA RECORD IS OUTREC.
+    22	      01  OUTREC.
+    23		  02 D-NOS PIC X(20).
+    24		  02 D-TOS PIC X(20).
+    25		  02 D-CCRWS PIC X(6).
+    26		  02 D-MATA PIC X(10).
+    27		  02 D-MON PIC X(12).
+    28
+    29	      WORKING-STORAGE SECTION.
+    30	      01  NOS PIC X(20) VALUE SPACES.
+    31	      01  WS PIC 9(3) VALUE 0.
+    32	      01  TOS PIC X(20) VALUE SPACES.
+    33	      01  CCRWS PIC X(6) VALUE SPACES.
+    34	      01  AR PIC X(20) VALUE SPACES.
+    35	      01  MATA PIC X(10) VALUE SPACES.
+    36	      01  MONO PIC 9(2) VALUE 0.
+    37	      01  MON PIC X(12) VALUE SPACES.
+    38
+    39	      01  MAXS PIC 9(3) VALUE 0.
+    40	      01  SSY PIC X(20) VALUE SPACES.
+    41
+    42	      01  MRL PIC 9 VALUE 0.
+    43	      01  CRL PIC 9 VALUE 0.
+    44	      01  MFFA PIC X(10) VALUE SPACES.
+    45
+    46	      01  MONTH-TABLE.
+    47		  05 MONTH-COUNT    PIC 99 VALUE 0 OCCURS 12 TIMES.
+    48	      01  IDX		    PIC 99 VALUE 0.
+    49	      01  MAX-MONTH-COUNT   PIC 99 VALUE 0.
+    50	      01  MMNS		    PIC X(12) VALUE SPACES.
+    51
+    52	      01  ANS PIC X VALUE SPACES.
+    53	      01  VALID-SW PIC X VALUE SPACES.
+    54
+    55	      SCREEN SECTION.
+    56	      01  SCRE.
+    57		  02 DISPLAY BLANK SCREEN.
+    58
+    59	      PROCEDURE DIVISION.
+    60	      MAIN-RTN.    61		  OPEN OUTPUT OUTFILE.							19JAN26 23:21:12  PAGE	  2
+    62		  PERFORM PROCESS-RTN THRU PROCESS-END
+    63                UNTIL ANS = 'N' OR ANS = 'n'.
+    64		  PERFORM SUMMARY-RTN.
+    65		  CLOSE OUTFILE.
+    66		  STOP RUN.
+    67
+    68	      PROCESS-RTN.
+    69		  DISPLAY SCRE.
+    70            DISPLAY (1, 37) 'PAG-ASA'.
+    71            DISPLAY (3, 22) 'Weather Situtaion in the Philippines'.
+    72            DISPLAY (4, 35) 'Year 2025'.
+    73
+    74            DISPLAY (6, 1) 'Name of Storm: '.
+    75		  ACCEPT (6, 45) NOS.
+    76
+    77            DISPLAY (7, 1) 'Wind Speed (in kmph): '.
+    78            MOVE 'N' TO VALID-SW
+    79		  ACCEPT (7, 45) WS.
+    80		  EVALUATE WS
+    81		      WHEN 0 THRU 62
+    82                    MOVE "LOW PRESSURE AREA" TO TOS
+    83		      WHEN 63 THRU 88
+    84                    MOVE "TROPICAL DEPRESSION" TO TOS
+    85		      WHEN 89 THRU 118
+    86                    MOVE "TYPHOON SIGNAL NO.3" TO TOS
+    87		      WHEN 119 THRU 184
+    88                    MOVE "TYPHOON SIGNAL NO.4" TO TOS
+    89		      WHEN 185 THRU 999
+    90                    MOVE "TYPHOON SIGNAL NO.5" TO TOS
+    91		  END-EVALUATE.
+    92
+    93		  IF WS >= MAXS
+    94		      MOVE WS TO MAXS
+    95		      MOVE NOS TO SSY
+    96		  END-IF.
+    97
+    98            DISPLAY (8, 1) 'Type of Storm: '.
+    99		  DISPLAY (8, 45) TOS.
+   100
+   101            DISPLAY (9, 1) 'Color Coded Rainfall Warning System: '.
+   102            MOVE 'N' TO VALID-SW.
+   103            PERFORM UNTIL VALID-SW = 'Y'
+   104		  ACCEPT (9, 45) CCRWS
+   105		  EVALUATE CCRWS
+   106                WHEN "YELLOW"
+   107                    MOVE "Response Monitor" TO AR
+   108			  MOVE 1 TO CRL
+   109                    MOVE 'Y' TO VALID-SW
+   110                    DISPLAY (23, 1) "                   "
+   111                WHEN "ORANGE"
+   112                    MOVE "Response Alert" TO AR
+   113			  MOVE 2 TO CRL
+   114                    MOVE 'Y' TO VALID-SW
+   115                    DISPLAY (23, 1) "                   "
+   116                WHEN "RED"
+   117                    MOVE "Response Evacuation" TO AR
+   118			  MOVE 3 TO CRL
+   119                    MOVE 'Y' TO VALID-SW
+   120                    DISPLAY (23, 1) "                   "   121		      WHEN OTHER							19JAN26 23:21:12  PAGE	  3
+   122                    DISPLAY (23, 1) "Invalid Input!"
+   123                    MOVE 'N' TO VALID-SW
+   124		  END-EVALUATE
+   125		  END-PERFORM.
+   126
+   127            DISPLAY (10, 1) 'Action/Response: '.
+   128		  DISPLAY (10, 45) AR.
+   129
+   130            DISPLAY (11, 1) 'Most Affected or Target Area: '.
+   131            MOVE 'N' TO VALID-SW.
+   132            PERFORM UNTIL VALID-SW = 'Y'
+   133		  ACCEPT (11, 45) MATA
+   134		  EVALUATE MATA
+   135                WHEN "LUZON"
+   136                    MOVE 'Y' TO VALID-SW
+   137                    DISPLAY (23, 1) "                   "
+   138                WHEN "VISAYAS"
+   139                    MOVE 'Y' TO VALID-SW
+   140                    DISPLAY (23, 1) "                   "
+   141                WHEN "MINDANAO"
+   142                    MOVE 'Y' TO VALID-SW
+   143                    DISPLAY (23, 1) "                   "
+   144		      WHEN OTHER
+   145                    DISPLAY (23, 1) "Invalid Input!"
+   146                    MOVE 'N' TO VALID-SW
+   147		  END-EVALUATE
+   148		  END-PERFORM.
+   149
+   150		  IF CRL >= MRL
+   151		      MOVE CRL TO MRL
+   152		      MOVE MATA TO MFFA
+   153		  END-IF.
+   154
+   155            DISPLAY (12, 1) 'Month Occurred (1-12): '.
+   156            MOVE 'N' TO VALID-SW.
+   157            PERFORM UNTIL VALID-SW = 'Y'
+   158		      ACCEPT (12, 45) MONO
+   159			  IF MONO > 0 AND MONO <= 12
+   160                        MOVE 'Y' TO VALID-SW
+   161                        DISPLAY (23, 1) "                "
+   162			  ELSE
+   163                        DISPLAY (23, 1) "1-12 Only!"
+   164			      MOVE ZERO TO MONO
+   165			  END-IF
+   166		  END-PERFORM.
+   167		  EVALUATE MONO
+   168                WHEN 1 MOVE "January" TO MON
+   169                WHEN 2 MOVE "February" TO MON
+   170                WHEN 3 MOVE "March" TO MON
+   171                WHEN 4 MOVE "April" TO MON
+   172                WHEN 5 MOVE "May" TO MON
+   173                WHEN 6 MOVE "June" TO MON
+   174                WHEN 7 MOVE "July" TO MON
+   175                WHEN 8 MOVE "August" TO MON
+   176                WHEN 9 MOVE "September" TO MON
+   177                WHEN 10 MOVE "October" TO MON
+   178                WHEN 11 MOVE "November" TO MON
+   179                WHEN 12 MOVE "December" TO MON
+   180		  END-EVALUATE.   181											19JAN26 23:21:12  PAGE	  4
+   182		  IF MONO >= 1 AND MONO <= 12
+   183		      ADD 1 TO MONTH-COUNT(MONO)
+   184		  END-IF.
+   185
+   186		  MOVE NOS TO D-NOS.
+   187		  MOVE TOS TO D-TOS.
+   188		  MOVE CCRWS TO D-CCRWS.
+   189		  MOVE MATA TO D-MATA.
+   190		  MOVE MON TO D-MON.
+   191
+   192		  WRITE OUTREC.
+   193
+   194            DISPLAY (14, 30) 'Input Another Record?'.
+   195		  ACCEPT ANS.
+   196	      PROCESS-END.
+   197
+   198	      SUMMARY-RTN.
+   199		  PERFORM VARYING IDX FROM 1 BY 1 UNTIL IDX > 12
+   200		      IF MONTH-COUNT(IDX) >= MAX-MONTH-COUNT
+   201			  MOVE MONTH-COUNT(IDX) TO MAX-MONTH-COUNT
+   202			  EVALUATE IDX
+   203                        WHEN 1 MOVE "January" TO MMNS
+   204                        WHEN 2 MOVE "February" TO MMNS
+   205                        WHEN 3 MOVE "March" TO MMNS
+   206                        WHEN 4 MOVE "April" TO MMNS
+   207                        WHEN 5 MOVE "May" TO MMNS
+   208                        WHEN 6 MOVE "June" TO MMNS
+   209                        WHEN 7 MOVE "July" TO MMNS
+   210                        WHEN 8 MOVE "August" TO MMNS
+   211                        WHEN 9 MOVE "September" TO MMNS
+   212                        WHEN 10 MOVE "October" TO MMNS
+   213                        WHEN 11 MOVE "November" TO MMNS
+   214                        WHEN 12 MOVE "December" TO MMNS
+   215			  END-EVALUATE
+   216		      END-IF
+   217		  END-PERFORM.
+   218
+   219            DISPLAY (16, 1) 'The Strongest Storm in a Year is: '.
+   220		  DISPLAY (16, 45) SSY.
+   221
+   222            DISPLAY (17, 1) 'The Most Flooded Flooded Area: '.
+   223		  DISPLAY (17, 45) MFFA.
+   224
+   225            DISPLAY (18, 1) 'The Month with the Most Storms'.
+   226		  DISPLAY (18, 45) MMNS.
+   227
+   228            DISPLAY (22, 20) 'Press Enter to Exit'.
+   229		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:WSP.COB					19JAN26 23:21:12  PAGE	  5
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        1095	 WSP$C00
+			  D00	     06        0557	 WSP$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     229
+			Compilation time (mm:ss.hh):  0:02.41
+			Compilation speed (lines/minute):  5701
+
+			Compilation date (yy/mm/dd): 26/01/19
+			     Time of day (hh:mm:ss): 23:21:14
+
+			Source length in LST file:000008767

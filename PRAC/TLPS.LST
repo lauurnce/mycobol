@@ -1,0 +1,244 @@
+     1	      IDENTIFICATION DIVISION.							19JAN26 23:16:50  PAGE	  1
+     2	      PROGRAM-ID. TLPS.
+     3	     *AUTHOR. HAROLD.
+     4	     *INSTALLATION. HOME.
+     5	     *DATE-WRITTEN. JANUARY.
+     6	     *SECURITY. EXCLUSIVE FOR BSIT 2-4.
+     7	     *REMARKS. PRACTICE PROGRAM.
+     8
+     9	      ENVIRONMENT DIVISION.
+    10	      CONFIGURATION SECTION.
+    11	      SOURCE-COMPUTER. IBM-PC.
+    12	      OBJECT-COMPUTER. IBM-PC.
+    13	      INPUT-OUTPUT SECTION.
+    14	      FILE-CONTROL.
+    15            SELECT OUTFILE ASSIGN TO "BENEDICT".
+    16
+    17	      DATA DIVISION.
+    18	      FILE SECTION.
+    19	      FD  OUTFILE
+    20		  LABEL RECORD IS STANDARD
+    21		  DATA RECORD IS OUTREC.
+    22	      01  OUTREC.
+    23		  02 D-MN PIC X(12).
+    24		  02 D-NOTS PIC X(25).
+    25		  02 D-NOV PIC 9(6).
+    26
+    27	      WORKING-STORAGE SECTION.
+    28	      01  SC PIC 9 VALUE 0.
+    29	      01  NOTS PIC X(20) VALUE SPACES.
+    30	      01  MC PIC 99 VALUE 0.
+    31	      01  MN PIC X(12) VALUE SPACES.
+    32	      01  TC PIC 9 VALUE 0.
+    33	      01  AIRT PIC X(16) VALUE SPACES.
+    34	      01  NOV PIC 9(6) VALUE 0.
+    35
+    36	      01  VALID-SW PIC X VALUE SPACES.
+    37	      01  ANS PIC X VALUE SPACES.
+    38
+    39	      01  ARRAYS.
+    40		  05 STORED-TOTALS PIC 9(7) OCCURS 4 TIMES VALUE 0.
+    41		  05 STORED-TIMES PIC X(16) OCCURS 4 TIMES VALUE SPACES.
+    42		  05 STORED-NAMES PIC X(25) OCCURS 4 TIMES VALUE SPACES.
+    43
+    44	      01  I PIC 9 VALUE 0.
+    45	      01  MW-INDEX PIC 9 VALUE 0.
+    46
+    47	      01  MWTVS PIC X(25) VALUE SPACES.
+    48	      01  MAXTV PIC 9(6) VALUE 0.
+    49	      01  MWAIRT PIC X(16) VALUE SPACES.
+    50	      01  DISPLAY-MAX PIC 9(6).
+    51
+    52	      SCREEN SECTION.
+    53	      01  SCRE.
+    54		  02 DISPLAY BLANK SCREEN.
+    55
+    56	      PROCEDURE DIVISION.
+    57	      MAIN-RTN.
+    58		  OPEN OUTPUT OUTFILE.
+    59		  PERFORM PROCESS-RTN THRU PROCESS-END
+    60                UNTIL ANS = 'N' OR ANS = 'n'    61		  PERFORM SUMMARY-RTN.							19JAN26 23:16:50  PAGE	  2
+    62		  CLOSE OUTFILE.
+    63		  STOP RUN.
+    64
+    65	      PROCESS-RTN.
+    66		  DISPLAY SCRE.
+    67            DISPLAY (1, 22) "Television's Leading Primetime Shows".
+    68            DISPLAY (2, 24) "ABS-CBN and GMA Network".
+    69            DISPLAY (4, 25) "January - December, 2025 Survey".
+    70
+    71            DISPLAY (6, 1) "Show Code: ".
+    72            MOVE 'N' TO VALID-SW.
+    73            PERFORM UNTIL VALID-SW = 'Y'
+    74		  ACCEPT (6, 45) SC
+    75		      IF SC >= 1 AND SC <= 4
+    76                    MOVE 'Y' TO VALID-SW
+    77                    DISPLAY (24, 1) "            "
+    78		      ELSE
+    79                    DISPLAY (24, 1) "Invalid Show Code."
+    80		      END-IF
+    81		  END-PERFORM.
+    82
+    83		  EVALUATE SC
+    84		      WHEN 1
+    85                    MOVE "Eat Bulaga" TO NOTS
+    86		      WHEN 2
+    87                    MOVE "Its Showtime" TO NOTS
+    88		      WHEN 3
+    89                    MOVE "PBB" TO NOTS
+    90		      WHEN 4
+    91                    MOVE "Probinsiano" TO NOTS
+    92		  END-EVALUATE.
+    93
+    94            DISPLAY (7, 1) "Name of the Show: ".
+    95		  DISPLAY (7, 45) NOTS.
+    96
+    97            DISPLAY (8, 1) "Month Code: ".
+    98            MOVE 'N' TO VALID-SW
+    99            PERFORM UNTIL VALID-SW = 'Y'
+   100		  ACCEPT (8, 45) MC
+   101		      IF MC >= 1 AND MC <= 12
+   102                    MOVE 'Y' TO VALID-SW
+   103                    DISPLAY (24, 1) "             "
+   104		      ELSE
+   105                    DISPLAY (24, 1) "Invalid Month Code."
+   106		      END-IF
+   107		  END-PERFORM.
+   108
+   109		  EVALUATE MC
+   110                WHEN 1 MOVE "JANUARY" TO MN
+   111                WHEN 2 MOVE "FEBRUARY" TO MN
+   112                WHEN 3 MOVE "MARCH" TO MN
+   113                WHEN 4 MOVE "APRIL" TO MN
+   114                WHEN 5 MOVE "MAY" TO MN
+   115                WHEN 6 MOVE "JUNE" TO MN
+   116                WHEN 7 MOVE "JULY" TO MN
+   117                WHEN 8 MOVE "AUGUST" TO MN
+   118                WHEN 9 MOVE "SEPTEMBER" TO MN
+   119                WHEN 10 MOVE "OCTOBER" TO MN
+   120                WHEN 11 MOVE "NOVEMBER" TO MN   121                WHEN 12 MOVE "DECEMBER" TO MN                                     19JAN26 23:16:50  PAGE    3
+   122		  END-EVALUATE.
+   123
+   124            DISPLAY (9, 1) "Month Name: ".
+   125		  DISPLAY (9, 45) MN.
+   126
+   127            DISPLAY (10, 1) "Time Code: ".
+   128            MOVE 'N' TO VALID-SW
+   129            PERFORM UNTIL VALID-SW = 'Y'
+   130		  ACCEPT (10, 45) TC
+   131		      IF TC = 1 OR TC = 2
+   132                    MOVE 'Y' TO VALID-SW
+   133                    DISPLAY (24, 1) "         "
+   134		      ELSE
+   135                    DISPLAY (24, 1) "Invalid Time Code."
+   136		      END-IF
+   137		  END-PERFORM.
+   138
+   139		  EVALUATE TC
+   140		      WHEN 1
+   141                    MOVE "12:00 - 2:30 pm" TO AIRT
+   142		      WHEN 2
+   143                    MOVE "8:00 - 10:00 pm" TO AIRT
+   144		  END-EVALUATE.
+   145
+   146            DISPLAY (11, 1) "Airtime: ".
+   147		  DISPLAY (11, 45) AIRT.
+   148
+   149            DISPLAY (12, 1) "Number of Televiewers: ".
+   150		  ACCEPT (12, 45) NOV.
+   151
+   152		  ADD NOV TO STORED-TOTALS(SC).
+   153		  MOVE AIRT TO STORED-TIMES(SC).
+   154		  MOVE NOTS TO STORED-NAMES(SC).
+   155
+   156            DISPLAY (14, 1) "Input Another Record (Y/N)?".
+   157		  ACCEPT ANS.
+   158
+   159		  MOVE MN TO D-MN.
+   160		  MOVE NOTS TO D-NOTS.
+   161		  MOVE NOV TO D-NOV.
+   162
+   163		  WRITE OUTREC.
+   164	      PROCESS-END.
+   165
+   166	      SUMMARY-RTN.
+   167		  MOVE 0 TO MAXTV.
+   168
+   169		  PERFORM VARYING I FROM 1 BY 1 UNTIL I > 4
+   170		      IF STORED-TOTALS(I) >= MAXTV
+   171			  MOVE STORED-TOTALS(I) TO MAXTV
+   172			  MOVE STORED-TIMES(I) TO MWAIRT
+   173			  MOVE STORED-NAMES(I) TO MWTVS
+   174		      END-IF
+   175		  END-PERFORM.
+   176
+   177            DISPLAY (16, 1) "Most Watched Television Show: ".
+   178		  DISPLAY (16, 45) MWTVS.
+   179
+   180            DISPLAY (17, 1) "Total No. of Televiewers: ".   181		  DISPLAY (17, 45) MAXTV.						19JAN26 23:16:50  PAGE	  4
+   182
+   183            DISPLAY (18, 1) "Airtime: ".
+   184		  DISPLAY (18, 45) MWAIRT.
+   185
+   186            DISPLAY (22, 20) 'Press Enter to Exit'.
+   187		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:TLPS.COB					19JAN26 23:16:50  PAGE	  5
+
+LINE ERR# LVL			 ERROR TEXT
+
+ 171 0621 W Digits may be truncated during MOVE from 'STORED-TOTALS'
+
+tlps	 has   1 Warning  messageRealia COBOL Version 4.000   SN: 01-07732  C:TLPS.COB					19JAN26 23:16:50  PAGE	  6
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        0D0C	 TLPS$C00
+			  D00	     06        0519	 TLPS$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     187
+			Compilation time (mm:ss.hh):  0:03.19
+			Compilation speed (lines/minute):  3517
+
+			Compilation date (yy/mm/dd): 26/01/19
+			     Time of day (hh:mm:ss): 23:16:51
+
+			Source length in LST file:000006639
