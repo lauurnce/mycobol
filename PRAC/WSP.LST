@@ -1,4 +1,4 @@
-     1	      IDENTIFICATION DIVISION.							19JAN26 23:21:12  PAGE	  1
+     1	      IDENTIFICATION DIVISION.							20JAN26 10:37:50  PAGE	  1
      2	      PROGRAM-ID. WSP.
      3	     *AUTHOR. HAROLD.
      4	     *INSTALLATION. HOME.
@@ -12,7 +12,7 @@
     12	      OBJECT-COMPUTER. IBM-PC.
     13	      INPUT-OUTPUT SECTION.
     14	      FILE-CONTROL.
-    15            SELECT OUTFILE ASSIGN TO "HAROLDBE".
+    15            SELECT OUTFILE ASSIGN TO "ECNERWAL".
     16
     17	      DATA DIVISION.
     18	      FILE SECTION.
@@ -57,7 +57,7 @@
     57		  02 DISPLAY BLANK SCREEN.
     58
     59	      PROCEDURE DIVISION.
-    60	      MAIN-RTN.    61		  OPEN OUTPUT OUTFILE.							19JAN26 23:21:12  PAGE	  2
+    60	      MAIN-RTN.    61		  OPEN OUTPUT OUTFILE.							20JAN26 10:37:50  PAGE	  2
     62		  PERFORM PROCESS-RTN THRU PROCESS-END
     63                UNTIL ANS = 'N' OR ANS = 'n'.
     64		  PERFORM SUMMARY-RTN.
@@ -116,7 +116,7 @@
    117                    MOVE "Response Evacuation" TO AR
    118			  MOVE 3 TO CRL
    119                    MOVE 'Y' TO VALID-SW
-   120                    DISPLAY (23, 1) "                   "   121		      WHEN OTHER							19JAN26 23:21:12  PAGE	  3
+   120                    DISPLAY (23, 1) "                   "   121		      WHEN OTHER							20JAN26 10:37:50  PAGE	  3
    122                    DISPLAY (23, 1) "Invalid Input!"
    123                    MOVE 'N' TO VALID-SW
    124		  END-EVALUATE
@@ -175,7 +175,7 @@
    177                WHEN 10 MOVE "October" TO MON
    178                WHEN 11 MOVE "November" TO MON
    179                WHEN 12 MOVE "December" TO MON
-   180		  END-EVALUATE.   181											19JAN26 23:21:12  PAGE	  4
+   180		  END-EVALUATE.   181											20JAN26 10:37:50  PAGE	  4
    182		  IF MONO >= 1 AND MONO <= 12
    183		      ADD 1 TO MONTH-COUNT(MONO)
    184		  END-IF.
@@ -223,7 +223,7 @@
    226		  DISPLAY (18, 45) MMNS.
    227
    228            DISPLAY (22, 20) 'Press Enter to Exit'.
-   229		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:WSP.COB					19JAN26 23:21:12  PAGE	  5
+   229		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:WSP.COB					20JAN26 10:37:50  PAGE	  5
 
 
 
@@ -271,10 +271,10 @@
 				    ERROR LEVEL LIMIT: W
 
 			Source lines compiled:	     229
-			Compilation time (mm:ss.hh):  0:02.41
-			Compilation speed (lines/minute):  5701
+			Compilation time (mm:ss.hh):  0:02.74
+			Compilation speed (lines/minute):  5014
 
-			Compilation date (yy/mm/dd): 26/01/19
-			     Time of day (hh:mm:ss): 23:21:14
+			Compilation date (yy/mm/dd): 26/01/20
+			     Time of day (hh:mm:ss): 10:37:52
 
 			Source length in LST file:000008767

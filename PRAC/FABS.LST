@@ -1,0 +1,256 @@
+     1	      IDENTIFICATION DIVISION.							20JAN26 13:24:09  PAGE	  1
+     2	      PROGRAM-ID. FINALQUIZ.
+     3	     *AUTHOR.	    LAWRENCE PANES.
+     4	     *INSTALLATION. HOME.
+     5	     *DATE-WRITTEN. JANUARY 20.
+     6	     *SECURITY.     EXCLUSIVE FOR BSIT.
+     7	     *REMARKS.	    FINAL PRACTICAL QUIZ.
+     8
+     9	      ENVIRONMENT DIVISION.
+    10	      CONFIGURATION SECTION.
+    11	      SOURCE-COMPUTER. IBM-PC.
+    12	      OBJECT-COMPUTER. IBM-PC.
+    13	      INPUT-OUTPUT SECTION.
+    14	      FILE-CONTROL.
+    15            SELECT OUTFILE ASSIGN TO "PANES".
+    16
+    17	      DATA DIVISION.
+    18	      FILE SECTION.
+    19	      FD  OUTFILE
+    20		  LABEL RECORD IS STANDARD
+    21		  DATA RECORD IS OUTREC.
+    22	      01  OUTREC.
+    23		  02 FILE-ACCT-NUM	 PIC 9(10).
+    24		  02 FILE-ACCT-NAME	 PIC X(25).
+    25		  02 FILE-SN	   PIC X(6).
+    26		  02 FILE-TN	 PIC X(12).
+    27		  02 FILE-ACCT-TYPE-NAME PIC X(15).
+    28		  02 FILE-BAL	     PIC 9(12)V99.
+    29		  02 FILE-BRANCH-NAME	 PIC X(15).
+    30
+    31	      WORKING-STORAGE SECTION.
+    32	      01  VALID-SW	  PIC X VALUE SPACES.
+    33	      01  ANS		  PIC X VALUE SPACES.
+    34	      01  TOTAL-CUST	  PIC 9(5) VALUE 0.
+    35
+    36	      01  IN-ACCT-NUM	  PIC 9(10) VALUE 0.
+    37	      01  IN-ACCT-NAME	  PIC X(25) VALUE SPACES.
+    38	      01  IN-SEX-CODE	  PIC X VALUE SPACES.
+    39	      01  IN-TRANS-TYPE   PIC X VALUE SPACES.
+    40	      01  IN-AMOUNT	  PIC 9(7)V99 VALUE 0.
+    41	      01  IN-ACCT-TYPE	  PIC X VALUE SPACES.
+    42	      01  IN-INIT-BAL	  PIC 9(12)V99 VALUE 0.
+    43	      01  IN-BRANCH-CODE  PIC X(3) VALUE SPACES.
+    44
+    45	      01  DER-SN       PIC X(6)  VALUE SPACES.
+    46	      01  DER-TN       PIC X(12) VALUE SPACES.
+    47	      01  DER-ACCT-TYPE-NAME  PIC X(15) VALUE SPACES.
+    48	      01  DER-BRANCH-NAME     PIC X(15) VALUE SPACES.
+    49	      01  DER-CURR-BAL	      PIC 9(12)V99 VALUE 0.
+    50	      01  DISPLAY-BAL	      PIC Z(12).99.
+    51
+    52	      SCREEN SECTION.
+    53	      01  SCRE.
+    54		  02 DISPLAY BLANK SCREEN.
+    55
+    56	      PROCEDURE DIVISION.
+    57	      MAIN-RTN.
+    58		  OPEN OUTPUT OUTFILE.
+    59		  PERFORM PROCESS-RTN THRU PROCESS-END
+    60                UNTIL ANS = 'N' OR ANS = 'n'.    61		  PERFORM SUMMARY-RTN.							20JAN26 13:24:09  PAGE	  2
+    62		  CLOSE OUTFILE.
+    63		  STOP RUN.
+    64
+    65	      PROCESS-RTN.
+    66		  DISPLAY SCRE.
+    67            DISPLAY (2, 35) "ChinaTrust Bank".
+    68            DISPLAY (3, 36) "Makati City".
+    69            DISPLAY (5, 32) "Customer's Account".
+    70
+    71            DISPLAY (7, 20) "Account Number:".
+    72		  ACCEPT  (7, 40) IN-ACCT-NUM.
+    73
+    74            DISPLAY (8, 20) "Account Name:".
+    75		  ACCEPT  (8, 40) IN-ACCT-NAME.
+    76
+    77            DISPLAY (9, 20) "Sex Code:".
+    78            MOVE 'N' TO VALID-SW.
+    79            PERFORM UNTIL VALID-SW = 'Y'
+    80		      ACCEPT (9, 40) IN-SEX-CODE
+    81                IF IN-SEX-CODE = 'F' OR IN-SEX-CODE = 'M'
+    82                    MOVE 'Y' TO VALID-SW
+    83                    DISPLAY (24, 1) "                      "
+    84		      ELSE
+    85                    DISPLAY (24, 1) "Invalid Sex Code (F/M)"
+    86		      END-IF
+    87		  END-PERFORM.
+    88
+    89		  EVALUATE IN-SEX-CODE
+    90                WHEN 'F' MOVE "Female" TO DER-SN
+    91                WHEN 'M' MOVE "Male"   TO DER-SN
+    92		  END-EVALUATE.
+    93
+    94            DISPLAY (10, 20) "Sex Name:".
+    95		  DISPLAY (10, 40) DER-SN.
+    96
+    97            DISPLAY (11, 20) "Transaction Type:".
+    98            MOVE 'N' TO VALID-SW.
+    99            PERFORM UNTIL VALID-SW = 'Y'
+   100		      ACCEPT (11, 40) IN-TRANS-TYPE
+   101                IF IN-TRANS-TYPE = 'D' OR IN-TRANS-TYPE = 'W'
+   102                    MOVE 'Y' TO VALID-SW
+   103                    DISPLAY (24, 1) "                      "
+   104		      ELSE
+   105                    DISPLAY (24, 1) "Invalid Type (D/W)    "
+   106		      END-IF
+   107		  END-PERFORM.
+   108
+   109		  EVALUATE IN-TRANS-TYPE
+   110                WHEN 'D' MOVE "Deposit"    TO DER-TN
+   111                WHEN 'W' MOVE "Withdrawal" TO DER-TN
+   112		  END-EVALUATE.
+   113
+   114            DISPLAY (12, 20) "Transaction Name:".
+   115		  DISPLAY (12, 40) DER-TN.
+   116
+   117            DISPLAY (13, 20) "Amount:".
+   118		  ACCEPT  (13, 40) IN-AMOUNT.
+   119
+   120            DISPLAY (14, 20) "Account Type:".   121            MOVE 'N' TO VALID-SW.                                                 20JAN26 13:24:09  PAGE    3
+   122            PERFORM UNTIL VALID-SW = 'Y'
+   123		      ACCEPT (14, 40) IN-ACCT-TYPE
+   124                IF IN-ACCT-TYPE = 'S' OR IN-ACCT-TYPE = 'C'
+   125                OR IN-ACCT-TYPE = 'D'
+   126                    MOVE 'Y' TO VALID-SW
+   127                    DISPLAY (24, 1) "                      "
+   128		      ELSE
+   129                    DISPLAY (24, 1) "Invalid Acct Type(S/C/D)"
+   130		      END-IF
+   131		  END-PERFORM.
+   132
+   133		  EVALUATE IN-ACCT-TYPE
+   134                WHEN 'S' MOVE "Savings Deposit"  TO DER-ACCT-TYPE-NAME
+   135                WHEN 'C' MOVE "Checking Account" TO DER-ACCT-TYPE-NAME
+   136                WHEN 'D' MOVE "Dollar Account"   TO DER-ACCT-TYPE-NAME
+   137		  END-EVALUATE.
+   138
+   139            DISPLAY (15, 20) "Account Type Name:".
+   140		  DISPLAY (15, 40) DER-ACCT-TYPE-NAME.
+   141
+   142            DISPLAY (16, 20) "Initial Balance:".
+   143		  ACCEPT  (16, 40) IN-INIT-BAL.
+   144
+   145            IF IN-TRANS-TYPE = 'D'
+   146		      COMPUTE DER-CURR-BAL = IN-INIT-BAL + IN-AMOUNT
+   147		  ELSE
+   148		      COMPUTE DER-CURR-BAL = IN-INIT-BAL - IN-AMOUNT
+   149		  END-IF.
+   150
+   151		  MOVE DER-CURR-BAL TO DISPLAY-BAL.
+   152            DISPLAY (17, 20) "Current Balance:".
+   153		  DISPLAY (17, 40) DISPLAY-BAL.
+   154
+   155            DISPLAY (18, 20) "Branch Code:".
+   156            MOVE 'N' TO VALID-SW.
+   157            PERFORM UNTIL VALID-SW = 'Y'
+   158		      ACCEPT (18, 40) IN-BRANCH-CODE
+   159		      EVALUATE IN-BRANCH-CODE
+   160                    WHEN "PAR"
+   161                        MOVE "Paranaque"   TO DER-BRANCH-NAME
+   162                        MOVE 'Y' TO VALID-SW
+   163                    WHEN "PAS"
+   164                        MOVE "Pasay"       TO DER-BRANCH-NAME
+   165                        MOVE 'Y' TO VALID-SW
+   166                    WHEN "MAN"
+   167                        MOVE "Mandaluyong" TO DER-BRANCH-NAME
+   168                        MOVE 'Y' TO VALID-SW
+   169                    WHEN "SME"
+   170                        MOVE "Sta. Mesa"   TO DER-BRANCH-NAME
+   171                        MOVE 'Y' TO VALID-SW
+   172                    WHEN "SJA"
+   173                        MOVE "San Juan"    TO DER-BRANCH-NAME
+   174                        MOVE 'Y' TO VALID-SW
+   175			  WHEN OTHER
+   176                        DISPLAY (24, 1) "Invalid Branch Code.  "
+   177                        MOVE 'N' TO VALID-SW
+   178		      END-EVALUATE
+   179		  END-PERFORM.
+   180   181            DISPLAY (24, 1) "                      ".                             20JAN26 13:24:09  PAGE    4
+   182            DISPLAY (19, 20) "Branch Name:".
+   183		  DISPLAY (19, 40) DER-BRANCH-NAME.
+   184
+   185		  MOVE IN-ACCT-NUM	 TO FILE-ACCT-NUM.
+   186		  MOVE IN-ACCT-NAME	 TO FILE-ACCT-NAME.
+   187		  MOVE DER-SN	   TO FILE-SN.
+   188		  MOVE DER-TN	   TO FILE-TN.
+   189		  MOVE DER-ACCT-TYPE-NAME TO FILE-ACCT-TYPE-NAME.
+   190		  MOVE DER-CURR-BAL	 TO FILE-BAL.
+   191		  MOVE DER-BRANCH-NAME	 TO FILE-BRANCH-NAME.
+   192
+   193		  WRITE OUTREC.
+   194		  ADD 1 TO TOTAL-CUST.
+   195
+   196            DISPLAY (22, 30) "Input Another Record (Y/N)? ".
+   197		  ACCEPT ANS.
+   198
+   199	      PROCESS-END.
+   200
+   201	      SUMMARY-RTN.
+   202            DISPLAY (23, 30) "Total no. of Customers: ".
+   203		  DISPLAY (23, 55) TOTAL-CUST.
+   204            DISPLAY (25, 20) "Press Enter to Exit".
+   205		  ACCEPT ANS.Realia COBOL Version 4.000   SN: 01-07732  C:FABS.COB					20JAN26 13:24:09  PAGE	  5
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        0EDE	 FINALQUIZ$C00
+			  D00	     06        04D5	 FINALQUIZ$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     205
+			Compilation time (mm:ss.hh):  0:04.40
+			Compilation speed (lines/minute):  2795
+
+			Compilation date (yy/mm/dd): 26/01/20
+			     Time of day (hh:mm:ss): 13:24:10
+
+			Source length in LST file:000008267
