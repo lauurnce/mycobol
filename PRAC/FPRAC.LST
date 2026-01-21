@@ -1,0 +1,288 @@
+     1	      IDENTIFICATION DIVISION.							21JAN26 08:16:46  PAGE	  1
+     2	      PROGRAM-ID. PRC.
+     3	     *AUTHOR. LAWRENCE PANES.
+     4	     *DATE-WRITTEN. JANUARY 12, 2026.
+     5	     *SECURITY. EXCLUSIVE FOR BSIT 2-4.
+     6
+     7
+     8	      ENVIRONMENT DIVISION.
+     9	      CONFIGURATION SECTION.
+    10		    SOURCE-COMPUTER. IBM-PC.
+    11		    OBJECT-COMPUTER. IBM-PC.
+    12	      INPUT-OUTPUT SECTION.
+    13	      FILE-CONTROL.
+    14            SELECT OUTFILE ASSIGN TO 'ECNERW'.
+    15
+    16	      DATA DIVISION.
+    17	      FILE SECTION.
+    18	      FD  OUTFILE
+    19		  LABEL RECORD IS OMITTED
+    20		  DATA RECORD IS OUTREC.
+    21	      01  OUTREC PIC X(120).
+    22
+    23	      WORKING-STORAGE SECTION.
+    24	      01  ENO PIC 9(10) VALUE ZERO.
+    25	      01  ENA PIC X(25) VALUE ZERO.
+    26	      01  DOB PIC X(20) VALUE ZERO.
+    27	      01  UC PIC 9 VALUE ZERO.
+    28	      01  UN PIC X(5) VALUE ZERO.
+    29	      01  CC PIC 9 VALUE ZERO.
+    30	      01  CN PIC X(4) VALUE ZERO.
+    31	      01  TNI PIC 9(3) VALUE ZERO.
+    32	      01  TR PIC 99 VALUE ZERO.
+    33	      01  AVE PIC 99V99 VALUE ZERO.
+    34	      01  REM PIC X(6) VALUE SPACES.
+    35	      01  TNP PIC 99 VALUE ZERO.
+    36	      01  TNF PIC 99 VALUE ZERO.
+    37	      01  VALID-SW PIC X VALUE ZERO.
+    38	      01  ANS PIC X VALUE ZERO.
+    39	      01  COUNTER-1 PIC 9 VALUE ZERO.
+    40	      01  COUNTER-2 PIC 9 VALUE ZERO.
+    41
+    42	      01  HEAD-1.
+    43            02 FILLER PIC X(15) VALUE "Examinee".
+    44            02 FILLER PIC X(30) VALUE "Examinee".
+    45            02 FILLER PIC X(25) VALUE "Date of".
+    46            02 FILLER PIC X(15) VALUE "University".
+    47            02 FILLER PIC X(10) VALUE "Course".
+    48            02 FILLER PIC X(10) VALUE "Remarks".
+    49
+    50	      01  HEAD-2.
+    51            02 FILLER PIC X(15) VALUE "No.".
+    52            02 FILLER PIC X(30) VALUE "Name".
+    53            02 FILLER PIC X(25) VALUE "Birth".
+    54            02 FILLER PIC X(15) VALUE "Name".
+    55            02 FILLER PIC X(10) VALUE "Name".
+    56            02 FILLER PIC X(10) VALUE " ".
+    57
+    58	      01  HEAD-LINE.
+    59            02 FILLER PIC X(120) VALUE ALL "-".
+    60    61	      01  DET-LINE.								21JAN26 08:16:46  PAGE	  2
+    62		  02 D-ENO PIC 9(10).
+    63		  02 FILLER PIC X(5)  VALUE SPACES.
+    64		  02 D-ENA PIC X(25).
+    65		  02 FILLER PIC X(5)  VALUE SPACES.
+    66		  02 D-DOB PIC X(20).
+    67		  02 FILLER PIC X(5)  VALUE SPACES.
+    68		  02 D-UN PIC X(5).
+    69		  02 FILLER PIC X(10) VALUE SPACES.
+    70		  02 D-CN PIC X(4).
+    71		  02 FILLER PIC X(6)  VALUE SPACES.
+    72		  02 D-REM PIC X(6).
+    73
+    74	      SCREEN SECTION.
+    75	      01  SCRE.
+    76		  02 BLANK SCREEN.
+    77
+    78	      PROCEDURE DIVISION.
+    79	      MAIN-RTN.
+    80		  OPEN OUTPUT OUTFILE.
+    81		  WRITE OUTREC FROM HEAD-LINE.
+    82		  WRITE OUTREC FROM HEAD-1.
+    83		  WRITE OUTREC FROM HEAD-2.
+    84		  WRITE OUTREC FROM HEAD-LINE.
+    85		  PERFORM PROCESS-RTN THRU PROCESS-END
+    86                    UNTIL ANS = 'N' OR ANS = 'n'.
+    87		  CLOSE OUTFILE.
+    88		  STOP RUN.
+    89
+    90	      PROCESS-RTN.
+    91		  MOVE SPACES TO REM.
+    92		  DISPLAY SCRE.
+    93            DISPLAY (1, 23) 'Professional Regulation Commission'.
+    94            DISPLAY (4, 23) 'IT Professional Board Exam Result'.
+    95
+    96            DISPLAY (6, 1) 'Examinee Number: '.
+    97		  ACCEPT (6, 45) ENO.
+    98
+    99            DISPLAY (7, 1) 'Examinee Name: '.
+   100		  ACCEPT (7, 45) ENA.
+   101
+   102            DISPLAY (8, 1) 'Date of Birth: '.
+   103		  ACCEPT (8, 45) DOB.
+   104
+   105            DISPLAY (9, 1) 'University Code: '.
+   106            MOVE 'N' TO VALID-SW.
+   107            PERFORM UNTIL VALID-SW = 'Y'
+   108		      ACCEPT (9, 45) UC
+   109		      IF UC >= 1 AND UC <= 5
+   110                    MOVE 'Y' TO VALID-SW
+   111                    DISPLAY (23, 1) "                        "
+   112		      ELSE
+   113                    DISPLAY (23, 1) "Invalid University Code"
+   114		      END-IF
+   115		  END-PERFORM.
+   116
+   117            DISPLAY (10, 1) 'University Name: '.
+   118		  EVALUATE UC
+   119		      WHEN 1
+   120                    MOVE "UP" TO UN   121		      WHEN 2								21JAN26 08:16:46  PAGE	  3
+   122                    MOVE "PUP" TO UN
+   123		      WHEN 3
+   124                    MOVE "DLSU" TO UN
+   125		      WHEN 4
+   126                    MOVE "ADMU" TO UN
+   127		      WHEN 5
+   128                    MOVE "MAPUA" TO UN
+   129		      WHEN OTHER
+   130			  CONTINUE
+   131		  END-EVALUATE.
+   132		  DISPLAY (10, 45) UN.
+   133
+   134            DISPLAY (11, 1) 'Course Code: '.
+   135            MOVE 'N' TO VALID-SW.
+   136            PERFORM UNTIL VALID-SW = 'Y'
+   137		      ACCEPT (11, 45) CC
+   138		      IF CC >= 1 AND CC <= 3
+   139                    MOVE 'Y' TO VALID-SW
+   140                    DISPLAY (23, 1) "                     "
+   141		      ELSE
+   142                    DISPLAY (23, 1) "Invalid Course Code"
+   143		      END-IF
+   144		  END-PERFORM.
+   145
+   146            DISPLAY (12, 1) 'Course Name: '.
+   147		  EVALUATE CC
+   148		      WHEN 1
+   149                    MOVE "BSIT" TO CN
+   150		      WHEN 2
+   151                    MOVE "BSCS" TO CN
+   152		      WHEN 3
+   153                    MOVE "BSIS" TO CN
+   154		      WHEN OTHER
+   155			  CONTINUE
+   156		  END-EVALUATE.
+   157		  DISPLAY (12, 45) CN
+   158
+   159            DISPLAY (13, 1) 'Total No. of Items: '.
+   160            MOVE 'N' TO VALID-SW.
+   161            PERFORM UNTIL VALID-SW = 'Y'
+   162		      ACCEPT (13, 45) TNI
+   163		      IF TNI > 0
+   164                    MOVE 'Y' TO VALID-SW
+   165                    DISPLAY (23, 1) "                 "
+   166		      ELSE
+   167                    DISPLAY (23, 1) "Invalid Input"
+   168		      END-IF
+   169		  END-PERFORM.
+   170
+   171            DISPLAY (14, 1) 'Test Results (Score): '.
+   172            MOVE 'N' TO VALID-SW.
+   173            PERFORM UNTIL VALID-SW = 'Y'
+   174		      ACCEPT (14, 45) TR
+   175		      IF TR > -1 AND TR <= TNI
+   176                    MOVE 'Y' TO VALID-SW
+   177                    DISPLAY (23, 1) "                        "
+   178		      ELSE
+   179                    DISPLAY (23, 1) "Invalid Score"
+   180		      END-IF   181		  END-PERFORM.								21JAN26 08:16:46  PAGE	  4
+   182
+   183            DISPLAY (15, 1) 'Remarks: '.
+   184		  COMPUTE AVE = (TR * 1.0) / TNI.
+   185		  EVALUATE CC
+   186		      WHEN 1
+   187			  IF AVE >= .60
+   188                        MOVE "PASSED" TO REM
+   189			  ELSE
+   190                        MOVE "FAILED" TO REM
+   191			  END-IF
+   192		      WHEN 2
+   193			  IF AVE >= .70
+   194                        MOVE "PASSED" TO REM
+   195			  ELSE
+   196                        MOVE "FAILED" TO REM
+   197			  END-IF
+   198		      WHEN 3
+   199			  IF AVE >= .50
+   200                        MOVE "PASSED" TO REM
+   201			  ELSE
+   202                        MOVE "FAILED" TO REM
+   203			  END-IF
+   204		  END-EVALUATE.
+   205		  DISPLAY (15, 45) REM.
+   206
+   207            IF REM = "PASSED"
+   208		      ADD 1 TO COUNTER-1
+   209		  ELSE
+   210		      ADD 1 TO COUNTER-2
+   211		  END-IF.
+   212
+   213		  MOVE ENO TO D-ENO.
+   214		  MOVE ENA TO D-ENA.
+   215		  MOVE DOB TO D-DOB.
+   216		  MOVE UN TO D-UN.
+   217		  MOVE CN TO D-CN.
+   218		  MOVE REM TO D-REM.
+   219
+   220		  WRITE OUTREC FROM DET-LINE.
+   221
+   222            DISPLAY (17, 45) "Input Another Record? (Y/N)".
+   223		  ACCEPT ANS.
+   224
+   225            DISPLAY (19, 1) "Total No. of Passed: ".
+   226		  DISPLAY (19, 23) COUNTER-1.
+   227            DISPLAY (20, 1) "Total No. of Failed: ".
+   228		  DISPLAY (20, 23) COUNTER-2.
+   229
+   230	      PROCESS-END.Realia COBOL Version 4.000   SN: 01-07732  C:FPRAC.COB					21JAN26 08:16:46  PAGE	  5
+
+LINE ERR# LVL			 ERROR TEXT
+
+  10 0346 W 'SOURCE-COMPUTER' In invalid area; assumed valid
+  11 0346 W 'OBJECT-COMPUTER' In invalid area; assumed valid
+
+fprac	 has   2 Warning  messagesRealia COBOL Version 4.000   SN: 01-07732  C:FPRAC.COB					21JAN26 08:16:46  PAGE	  6
+
+
+
+				    Segment Table
+			Segment    Number     Length	    Name
+
+			  C00	     05        0DAA	 PRC$C00
+			  D00	     06        060D	 PRC$D00
+
+
+			Realia COBOL Compiler Version Information
+
+			      Pass 1	 Version 4.059
+			      Pass 1a	 Version 4.025
+			      Pass 2	 Version 4.059
+			      Pass 2a	 Version 4.024
+			      Pass 3	 Version 4.083
+			      Pass 4	 Version 4.028
+
+
+			Compilation Directives in Effect
+
+				    COMP-4
+				    NODCHK
+				      OPT
+				    NOCALL
+				    NOSUBCHK
+				      STRCHK
+				      ANSITRUNC
+				    NOSMALLCOMP
+				    NODCALL
+				    NODIVZERO
+				    NOEPDCALL
+				      APOST
+				      ASCII
+				      STATABORT
+				      MOVELINK
+				    NOBLL4K
+				      ARGCHK
+				      UPLOW
+				      WRITEAFTER
+				      SOSI
+				      DIALECT-REALIA4
+
+				    ERROR LEVEL LIMIT: W
+
+			Source lines compiled:	     230
+			Compilation time (mm:ss.hh):  0:02.42
+			Compilation speed (lines/minute):  5702
+
+			Compilation date (yy/mm/dd): 26/01/21
+			     Time of day (hh:mm:ss): 08:16:47
+
+			Source length in LST file:000008099
